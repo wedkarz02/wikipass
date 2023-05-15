@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"wikipass/src"
+)
 
 func main() {
 	fmt.Println("hello world")
+	src.Hello()
 }
