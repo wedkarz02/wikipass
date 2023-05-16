@@ -25,7 +25,7 @@ func EncryptAES(plainText []byte, key []byte) {
 	nonce := make([]byte, gcm.NonceSize())
 
 	if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
-		log.Fatalln("[ERROR]: Something went wrong while seeding the nounce: ", err)
+		log.Fatalln("[ERROR]: Something went wrong while seeding the nonce: ", err)
 	}
 
 	fmt.Println(string(gcm.Seal(nonce, nonce, plainText, nil)))
