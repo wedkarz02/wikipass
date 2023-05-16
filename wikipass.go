@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"wikipass/src"
 )
 
 func main() {
-	fmt.Println("hello world")
-	src.Hello()
+	src.EncryptAES([]byte("Hello, world!"), []byte("#secret-that-has-to-be-32-bytes!"))
 }
