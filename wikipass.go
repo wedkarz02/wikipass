@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	"wikipass/src"
+	"wikipass/pkg/aeswrapper"
 )
 
 func main() {
-	cipher := src.EncryptAES([]byte("Hello, world!"), []byte("#secret-that-has-to-be-32-bytes!"))
+	cipher := aeswrapper.EncryptAES([]byte("Hello, world!"), []byte("#secret-that-has-to-be-32-bytes!"))
 	fmt.Println(string(cipher))
 
-	plain := src.DecryptAES(cipher, []byte("#secret-that-has-to-be-32-bytes!"))
+	plain := aeswrapper.DecryptAES(cipher, []byte("#secret-that-has-to-be-32-bytes!"))
 	fmt.Println(string(plain))
 }
