@@ -6,9 +6,10 @@ import (
 	"crypto/rand"
 	"io"
 	"log"
+	"os"
 )
 
-func EncryptAES(plainText []byte, key []byte) []byte {
+func EncryptAES(fileName string, plainText []byte, key []byte) {
 	c, err := aes.NewCipher(key)
 
 	if err != nil {
@@ -27,10 +28,15 @@ func EncryptAES(plainText []byte, key []byte) []byte {
 		log.Fatalln("[ERROR]: Something went wrong while seeding the nonce: ", err)
 	}
 
-	return gcm.Seal(nonce, nonce, plainText, nil)
+	// writeToFile(gcm.Seal(nonce, nonce, plainText, nil))
+	err = os.WriteFile(fileName, gcm.Seal(nonce, nonce, plainText, nil), 0644)
+
+	if err != nil {
+		log.Fatalln("[ERROR]: Something went wrong while writing to the file: ", err)
+	}
 }
 
-func DecryptAES(cipherText []byte, key []byte) []byte {
+func DecryptAES(fileName string, key []byte) []byte {
 	c, err := aes.NewCipher(key)
 
 	if err != nil {
@@ -44,6 +50,12 @@ func DecryptAES(cipherText []byte, key []byte) []byte {
 	}
 
 	nonceSize := gcm.NonceSize()
+
+	cipherText, err := os.ReadFile(fileName)
+
+	if err != nil {
+		log.Fatalln("[ERROR]: Something went wrong while reading the file: ", err)
+	}
 
 	if len(cipherText) < nonceSize {
 		log.Fatalln("[ERROR]: Cipher length is shorter than the nonce!")

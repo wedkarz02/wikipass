@@ -5,10 +5,15 @@ import (
 	"wikipass/pkg/aeswrapper"
 )
 
-func main() {
-	cipher := aeswrapper.EncryptAES([]byte("Hello, world!"), []byte("#secret-that-has-to-be-32-bytes!"))
-	fmt.Println(string(cipher))
+const encryptionFile = "./pkg/aeswrapper/passwd.aes"
 
-	plain := aeswrapper.DecryptAES(cipher, []byte("#secret-that-has-to-be-32-bytes!"))
-	fmt.Println(string(plain))
+func main() {
+	plainText := "Hello, world!"
+	key := "#secret-that-has-to-be-32-bytes!"
+
+	fmt.Println(plainText, key)
+	aeswrapper.EncryptAES(encryptionFile, []byte(plainText), []byte(key))
+
+	message := aeswrapper.DecryptAES(encryptionFile, []byte(key))
+	fmt.Println(string(message))
 }
