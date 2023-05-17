@@ -1,3 +1,6 @@
 
-# executable output file
+# Executable output file
 /build/app
+
+# Binary file with encrypted passwords
+/pkg/aeswrapper/passwd.aes
