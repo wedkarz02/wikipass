@@ -3,4 +3,4 @@
 /build/app
 
 # Binary file with encrypted data
-/secret
+secret/
