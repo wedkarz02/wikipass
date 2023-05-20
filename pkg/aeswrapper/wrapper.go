@@ -4,10 +4,21 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
+	"errors"
 	"io"
 	"log"
 	"os"
 )
+
+func MakeSecretDir(path string) {
+	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
+		err := os.Mkdir(path, os.ModePerm)
+
+		if err != nil {
+			log.Fatalln("[ERROR]: Something went wrong while creating a directory \"secret\": ", err)
+		}
+	}
+}
 
 func EncryptAES(fileName string, plainText []byte, key []byte) {
 	c, err := aes.NewCipher(key)
