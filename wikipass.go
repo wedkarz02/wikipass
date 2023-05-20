@@ -5,9 +5,13 @@ import (
 	"wikipass/pkg/aeswrapper"
 )
 
-const encryptionFile = "./pkg/aeswrapper/passwd.aes"
+const secretDir = "./secret"
+const encryptionFile = "./secret/passwd.aes"
+const hashFile = "./secret/mpasswd.hash"
 
 func main() {
+	aeswrapper.MakeSecretDir(secretDir)
+
 	plainText := "Hello, world!"
 	key := "#secret-that-has-to-be-32-bytes!"
 
@@ -16,4 +20,9 @@ func main() {
 
 	message := aeswrapper.DecryptAES(encryptionFile, []byte(key))
 	fmt.Println(string(message))
+
+	hashMessage := aeswrapper.HashBytes([]byte(plainText))
+	stringHash := aeswrapper.ByteToString(hashMessage[:])
+
+	fmt.Println(stringHash)
 }
