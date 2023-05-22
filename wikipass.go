@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"wikipass/pkg/aeswrapper"
+	"wikipass/pkg/wiki"
 )
 
 const secretDir = "./secret"
@@ -25,4 +26,6 @@ func main() {
 	stringHash := aeswrapper.ByteToString(hashMessage[:])
 
 	fmt.Println(stringHash)
+
+	wiki.ApiTest()
 }
