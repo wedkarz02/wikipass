@@ -1,30 +1,42 @@
 package main
 
 import (
+	"log"
+	"os"
 	"wikipass/pkg/aeswrapper"
-	"wikipass/pkg/wiki"
+	"wikipass/pkg/consts"
 )
 
-const secretDir = "./secret"
-const encryptionFile = "./secret/passwd.aes"
-const hashFile = "./secret/mpasswd.hash"
+func logFile(fileName string, logData string) {
+	file, err := os.OpenFile(consts.LogDir+fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+
+	if err != nil {
+		log.Fatalln("[ERROR]: Something went wrong while creating log directory: ", err)
+	}
+
+	defer file.Close()
+
+	if _, err = file.WriteString(logData + "\n"); err != nil {
+		log.Fatalln("[ERROR]: Something went wrong while writing to logs: ", err)
+	}
+}
 
 func main() {
-	aeswrapper.MakeSecretDir(secretDir)
+	aeswrapper.MakeSecretDir(consts.SecretDir)
 
-	// plainText := "Hello, world!"
-	// key := "#secret-that-has-to-be-32-bytes!"
+	plainText := "Hello, world!"
+	key := "#secret-that-has-to-be-32-bytes!"
 
-	// fmt.Println(plainText, key)
-	// aeswrapper.EncryptAES(encryptionFile, []byte(plainText), []byte(key))
+	logFile(consts.PrintLog, plainText)
+	logFile(consts.PrintLog, key)
 
-	// message := aeswrapper.DecryptAES(encryptionFile, []byte(key))
-	// fmt.Println(string(message))
+	aeswrapper.EncryptAES(consts.EncryptionFile, []byte(plainText), []byte(key))
 
-	// hashMessage := aeswrapper.HashBytes([]byte(plainText))
-	// stringHash := aeswrapper.ByteToString(hashMessage[:])
+	message := aeswrapper.DecryptAES(consts.EncryptionFile, []byte(key))
+	logFile(consts.PrintLog, string(message))
 
-	// fmt.Println(stringHash)
+	hashMessage := aeswrapper.HashBytes([]byte(plainText))
+	stringHash := aeswrapper.ByteToString(hashMessage[:])
 
-	wiki.ApiTest()
+	logFile(consts.PrintLog, stringHash)
 }
