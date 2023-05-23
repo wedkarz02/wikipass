@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"wikipass/pkg/aeswrapper"
 	"wikipass/pkg/wiki"
 )
@@ -13,19 +12,19 @@ const hashFile = "./secret/mpasswd.hash"
 func main() {
 	aeswrapper.MakeSecretDir(secretDir)
 
-	plainText := "Hello, world!"
-	key := "#secret-that-has-to-be-32-bytes!"
+	// plainText := "Hello, world!"
+	// key := "#secret-that-has-to-be-32-bytes!"
 
-	fmt.Println(plainText, key)
-	aeswrapper.EncryptAES(encryptionFile, []byte(plainText), []byte(key))
+	// fmt.Println(plainText, key)
+	// aeswrapper.EncryptAES(encryptionFile, []byte(plainText), []byte(key))
 
-	message := aeswrapper.DecryptAES(encryptionFile, []byte(key))
-	fmt.Println(string(message))
+	// message := aeswrapper.DecryptAES(encryptionFile, []byte(key))
+	// fmt.Println(string(message))
 
-	hashMessage := aeswrapper.HashBytes([]byte(plainText))
-	stringHash := aeswrapper.ByteToString(hashMessage[:])
+	// hashMessage := aeswrapper.HashBytes([]byte(plainText))
+	// stringHash := aeswrapper.ByteToString(hashMessage[:])
 
-	fmt.Println(stringHash)
+	// fmt.Println(stringHash)
 
 	wiki.ApiTest()
 }

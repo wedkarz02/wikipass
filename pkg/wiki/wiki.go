@@ -1,29 +1,31 @@
 package wiki
 
 import (
-	"fmt"
-	"os"
 
 	// https://www.mediawiki.org/wiki/API:Main_page
+
+	"fmt"
+
 	"cgt.name/pkg/go-mwclient"
+	"cgt.name/pkg/go-mwclient/params"
 )
 
 // TODO: big refactor of this module. (just testing for now)
 
-func saveJSON(fileName string, data string) {
-	file, err := os.Create(fileName)
+// func saveJSON(fileName string, data string) {
+// 	file, err := os.Create(fileName)
 
-	if err != nil {
-		panic(err)
-	}
+// 	if err != nil {
+// 		panic(err)
+// 	}
 
-	defer file.Close()
+// 	defer file.Close()
 
-	file.WriteString(data)
-}
+// 	file.WriteString(data)
+// }
 
 func ApiTest() {
-	fmt.Println("hello from wikiapi")
+	// fmt.Println("hello from wikiapi")
 
 	w, err := mwclient.New("https://en.wikipedia.org/w/api.php", "wikiPasswordSearch")
 
@@ -31,11 +33,28 @@ func ApiTest() {
 		panic(err)
 	}
 
-	data, _, err := w.GetPageByName("pizza")
+	parameters := params.Values{
+		"action":  "query",
+		"format":  "json",
+		"list":    "random",
+		"rnlimit": "5",
+	}
+
+	response, err := w.Get(parameters)
 
 	if err != nil {
 		panic(err)
 	}
 
-	saveJSON("./pkg/wiki/data.json", data)
+	// data := map[string]string{}
+
+	fmt.Println(response)
+	// var data map[string]interface{}
+	// json.Unmarshal([]byte(response), &data)
+
+	// for _, el := range response.Map() {
+	// 	fmt.Println(*el)
+	// }
+
+	// saveJSON("./pkg/wiki/data.json", data)
 }
