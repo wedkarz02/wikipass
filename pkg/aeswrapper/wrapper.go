@@ -15,7 +15,7 @@ func MakeSecretDir(path string) {
 		err := os.Mkdir(path, os.ModePerm)
 
 		if err != nil {
-			log.Fatalln("[ERROR]: Something went wrong while creating a directory \"secret\": ", err)
+			log.Fatalln("[ERROR]: Something went wrong while creating a directory \"secret\": ")
 		}
 	}
 }
