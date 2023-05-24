@@ -15,5 +15,6 @@ func ByteToString(hexSum []byte) string {
 
 // TODO: XOR the master password with some IV for a better key generation
 func GenKey(masterPassword string) []byte {
-	return []byte(masterPassword)[:32]
+	hashedPassword := HashBytes([]byte(masterPassword))
+	return hashedPassword[:32]
 }
