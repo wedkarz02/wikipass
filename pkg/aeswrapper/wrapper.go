@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-func MakeSecretDir(path string) {
+func InitSecretDir(path string) {
 	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
 		err := os.Mkdir(path, os.ModePerm)
 

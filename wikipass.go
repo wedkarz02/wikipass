@@ -7,13 +7,16 @@ import (
 )
 
 func main() {
-	aeswrapper.MakeSecretDir(consts.SecretDir)
+	aeswrapper.InitSecretDir(consts.SecretDir)
 
-	plainText := "a"
-	key := "#secret-that-has-to-be-32-byt!"
+	// Ask the user for the master password here.
+	masterPassword := "VeryStrongPasswordThatWillBeHashedInAMoment"
+	key := aeswrapper.GenKey(masterPassword)
+
+	plainText := "Hello world!"
 
 	fmt.Println(plainText)
-	fmt.Println(key)
+	fmt.Println(aeswrapper.ByteToString(key))
 
 	aeswrapper.EncryptAES(consts.EncryptionFile, []byte(plainText), []byte(key))
 
