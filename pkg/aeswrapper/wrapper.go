@@ -39,7 +39,6 @@ func EncryptAES(fileName string, plainText []byte, key []byte) {
 		log.Fatalln("[ERROR]: Something went wrong while seeding the nonce: ", err)
 	}
 
-	// writeToFile(gcm.Seal(nonce, nonce, plainText, nil))
 	err = os.WriteFile(fileName, gcm.Seal(nonce, nonce, plainText, nil), 0644)
 
 	if err != nil {
@@ -76,7 +75,7 @@ func DecryptAES(fileName string, key []byte) []byte {
 	plainText, err := gcm.Open(nil, nonce, cipherText, nil)
 
 	if err != nil {
-		log.Fatalln("[ERROR]: Something went wrong while decrypting: ", err)
+		log.Fatalln("[ERROR]: The key is incorrect: ", err)
 	}
 
 	return plainText
