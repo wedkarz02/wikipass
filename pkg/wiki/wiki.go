@@ -8,8 +8,8 @@ import (
 	"cgt.name/pkg/go-mwclient/params"
 )
 
-func GetRandTitle() {
-	wiki, err := mwclient.New("https://en.wikipedia.org/w/api.php", "wikiPasswordSearch")
+func GetRandArticle() string {
+	wiki, err := mwclient.New("https://en.wikipedia.org/w/api.php", "wikiRandArticle")
 
 	if err != nil {
 		log.Fatalln("[ERROR]: Something went wrong while connecting to the API: ", err)
@@ -40,7 +40,39 @@ func GetRandTitle() {
 		log.Fatalln("[ERROR]: JSON query parsing failed: ", err)
 	}
 
-	for _, el := range jsonRand {
-		fmt.Println(el)
+	// pageId, err := jsonRand[0].GetNumber("id")
+	title, err := jsonRand[0].GetString("title")
+
+	if err != nil {
+		log.Fatalln("[ERROR]: JSON id parsing failed: ", err)
 	}
+
+	fmt.Println(title)
+
+	return title
+}
+
+func GetArticleContent(title string) {
+	wiki, err := mwclient.New("https://en.wikipedia.org/w/api.php", "wikiGetContent")
+
+	if err != nil {
+		log.Fatalln("[ERROR]: Something went wrong while connecting to the API: ", err)
+	}
+
+	parameters := params.Values{
+		"action":        "query",
+		"prop":          "revisions",
+		"titles":        title,
+		"rvslots":       "",
+		"rvprop":        "content",
+		"formatversion": "2",
+	}
+
+	content, err := wiki.Get(parameters)
+
+	if err != nil {
+		log.Fatalln("[ERROR]: Invalid API server response: ", err)
+	}
+
+	fmt.Println(content)
 }
