@@ -8,7 +8,7 @@ import (
 	"cgt.name/pkg/go-mwclient/params"
 )
 
-func GetRandArticle() {
+func GetRandTitle() {
 	wiki, err := mwclient.New("https://en.wikipedia.org/w/api.php", "wikiPasswordSearch")
 
 	if err != nil {
@@ -28,5 +28,19 @@ func GetRandArticle() {
 		log.Fatalln("[ERROR]: Invalid API server response: ", err)
 	}
 
-	fmt.Println(response)
+	query, err := response.GetObject("query")
+
+	if err != nil {
+		log.Fatalln("[ERROR]: JSON response parsing failed: ", err)
+	}
+
+	jsonRand, err := query.GetObjectArray("random")
+
+	if err != nil {
+		log.Fatalln("[ERROR]: JSON query parsing failed: ", err)
+	}
+
+	for _, el := range jsonRand {
+		fmt.Println(el)
+	}
 }
