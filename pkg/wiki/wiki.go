@@ -3,6 +3,7 @@ package wiki
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"cgt.name/pkg/go-mwclient"
 	"cgt.name/pkg/go-mwclient/params"
@@ -40,12 +41,15 @@ func GetRandArticle() string {
 		log.Fatalln("[ERROR]: JSON query parsing failed: ", err)
 	}
 
-	// pageId, err := jsonRand[0].GetNumber("id")
 	title, err := jsonRand[0].GetString("title")
 
 	if err != nil {
 		log.Fatalln("[ERROR]: JSON id parsing failed: ", err)
 	}
+
+	title = strings.ReplaceAll(title, " ", "_")
+	titleSplit := strings.Split(title, ":")
+	title = titleSplit[len(titleSplit) - 1]
 
 	fmt.Println(title)
 
@@ -62,10 +66,11 @@ func GetArticleContent(title string) {
 	parameters := params.Values{
 		"action":        "query",
 		"prop":          "revisions",
-		"titles":        title,
-		"rvslots":       "",
+		"rvslots":       "*",
 		"rvprop":        "content",
 		"formatversion": "2",
+		"format": 		 "json",
+		"titles":        title,
 	}
 
 	content, err := wiki.Get(parameters)
@@ -75,4 +80,19 @@ func GetArticleContent(title string) {
 	}
 
 	fmt.Println(content)
+	query, err := content.GetObject("query")
+
+	if err != nil {
+		log.Fatalln("[ERROR]: Query parsing failed: ", err)
+	}
+
+	pages, err := query.GetObjectArray("pages")
+
+	if err != nil {
+		log.Fatalln("[ERROR]: Query parsing failed: ", err)
+	}
+
+	for _, el := range pages {
+		fmt.Println(el) // TODO: Extract page content from here
+	}
 }
