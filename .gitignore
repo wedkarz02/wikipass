@@ -2,5 +2,5 @@
 # Executable output file
 /build/app
 
-# Binary file with encrypted data
+# Directory with encrypted data
 secret/

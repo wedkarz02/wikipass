@@ -10,13 +10,29 @@ import (
 	"os"
 )
 
-func InitSecretDir(path string) {
-	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
-		err := os.Mkdir(path, os.ModePerm)
+func InitIV(fileName string, size uint8) {
+	iv := make([]byte, size)
+
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		log.Fatalln("[ERROR]: Generation of the IV failed: ", err)
+	}
+
+	err := os.WriteFile(fileName, iv, 0644)
+
+	if err != nil {
+		log.Fatalln("[ERROR]: Something went wrong while writing to the file: ", err)
+	}
+}
+
+func InitSecretDir(dirPath string, ivPath string, ivSize uint8) {
+	if _, err := os.Stat(dirPath); errors.Is(err, os.ErrNotExist) {
+		err := os.Mkdir(dirPath, os.ModePerm)
 
 		if err != nil {
 			log.Fatalln("[ERROR]: Something went wrong while creating a directory \"secret\": ")
 		}
+
+		InitIV(ivPath, ivSize)
 	}
 }
 
