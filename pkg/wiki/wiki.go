@@ -35,13 +35,13 @@ func GetRandArticle() string {
 		log.Fatalln("[ERROR]: JSON response parsing failed: ", err)
 	}
 
-	jsonRand, err := query.GetObjectArray("random")
+	queryRand, err := query.GetObjectArray("random")
 
 	if err != nil {
 		log.Fatalln("[ERROR]: JSON query parsing failed: ", err)
 	}
 
-	title, err := jsonRand[0].GetString("title")
+	title, err := queryRand[0].GetString("title")
 
 	if err != nil {
 		log.Fatalln("[ERROR]: JSON id parsing failed: ", err)
@@ -49,7 +49,7 @@ func GetRandArticle() string {
 
 	title = strings.ReplaceAll(title, " ", "_")
 	titleSplit := strings.Split(title, ":")
-	title = titleSplit[len(titleSplit) - 1]
+	title = titleSplit[len(titleSplit)-1]
 
 	fmt.Println(title)
 
@@ -69,7 +69,7 @@ func GetArticleContent(title string) {
 		"rvslots":       "*",
 		"rvprop":        "content",
 		"formatversion": "2",
-		"format": 		 "json",
+		"format":        "json",
 		"titles":        title,
 	}
 
