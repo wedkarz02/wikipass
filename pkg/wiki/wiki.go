@@ -73,14 +73,13 @@ func GetArticleContent(title string) {
 		"titles":        title,
 	}
 
-	content, err := wiki.Get(parameters)
+	pageData, err := wiki.Get(parameters)
 
 	if err != nil {
 		log.Fatalln("[ERROR]: Invalid API server response: ", err)
 	}
 
-	fmt.Println(content)
-	query, err := content.GetObject("query")
+	query, err := pageData.GetObject("query")
 
 	if err != nil {
 		log.Fatalln("[ERROR]: Query parsing failed: ", err)
@@ -89,10 +88,38 @@ func GetArticleContent(title string) {
 	pages, err := query.GetObjectArray("pages")
 
 	if err != nil {
-		log.Fatalln("[ERROR]: Query parsing failed: ", err)
+		log.Fatalln("[ERROR]: Pages parsing failed: ", err)
 	}
 
-	for _, el := range pages {
-		fmt.Println(el) // TODO: Extract page content from here
+	if _, err := pages[0].GetBoolean("missing"); err == nil {
+		panicTitle := GetRandArticle()
+		GetArticleContent(panicTitle)
+		return
 	}
+
+	revisions, err := pages[0].GetObjectArray("revisions")
+
+	if err != nil {
+		log.Fatalln("[ERROR]: Revisions parsing failed: ", err)
+	}
+
+	slots, err := revisions[0].GetObject("slots")
+
+	if err != nil {
+		log.Fatalln("[ERROR]: Slots parsing failed: ", err)
+	}
+
+	mainObj, err := slots.GetObject("main")
+
+	if err != nil {
+		log.Fatalln("[ERROR]: MainObj parsing failed: ", err)
+	}
+
+	content, err := mainObj.GetString("content")
+
+	if err != nil {
+		log.Fatalln("[ERROR]: Content parsing failed: ", err)
+	}
+
+	fmt.Println(content)
 }
