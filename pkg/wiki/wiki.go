@@ -121,5 +121,11 @@ func GetArticleContent(title string) {
 		log.Fatalln("[ERROR]: Content parsing failed: ", err)
 	}
 
+	if strings.Contains(content, "#REDIRECT") {
+		panicTitle := GetRandArticle()
+		GetArticleContent(panicTitle)
+		return
+	}
+
 	fmt.Println(content)
 }
