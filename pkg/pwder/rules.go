@@ -44,14 +44,17 @@ func ReplaceAtIndex(str string, chr rune, idx int) string {
 }
 
 func RuleTransform(str string, n int) string {
+	// NOTE: maybe iterate over the entire word instead
+	//       and randomly select from [0, 1]
+	//       to determine if the transformation will be done or not
 	if len(str) < n {
 		log.Fatalln("[ERROR]: Word is shorter than number of transforms.")
 	}
 
 	for i := 0; i < n; i++ {
-		idx := rand.Intn(len(str) - 2) + 2
+		idx := rand.Intn(len(str))
 
-		if n & 2 == 0 {
+		if i & 2 == 0 {
 			chr := CaseTransform(rune(str[idx]))
 			str = ReplaceAtIndex(str, chr, idx)
 		} else {
