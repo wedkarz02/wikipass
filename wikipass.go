@@ -13,10 +13,14 @@ func main() {
 	word := "aAbggSeRllkK"
 	fmt.Println(word)
 	
-	for i, chr := range word {
-		repl := pwder.CaseTransform(chr)
-		word = pwder.ReplaceAtIndex(word, repl, i)
-	}
-
+	word = pwder.RuleTransform(word, 7)
 	fmt.Println(word)
+
+	
+	// for i, chr := range word {
+	// 	repl := pwder.CaseTransform(chr)
+	// 	word = pwder.ReplaceAtIndex(word, repl, i)
+	// }
+
+	// fmt.Println(word)
 }
