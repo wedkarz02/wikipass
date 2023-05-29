@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"wikipass/pkg/aeswrapper"
 	"wikipass/pkg/consts"
 	"wikipass/pkg/pwder"
@@ -16,10 +15,8 @@ func main() {
 	content := wiki.GetArticleContent(title)
 	wordList := wiki.ExtractWords(content)
 
-	fmt.Println(len(wordList))
-
 	for _, word := range wordList {
-		word = pwder.RuleTransform(word, rand.Intn(len(word)))
+		word = pwder.RuleTransform(word)
 		fmt.Println(word)
 	}
 }

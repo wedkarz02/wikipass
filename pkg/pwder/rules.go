@@ -1,7 +1,6 @@
 package pwder
 
 import (
-	"log"
 	"math/rand"
 	"unicode"
 )
@@ -34,37 +33,30 @@ func CaseTransform(chr rune) rune {
 }
 
 func ReplaceAtIndex(str string, chr rune, idx int) string {
-	if len(str) <= idx {
-		log.Fatalln("[ERROR]: Invalid index provided.")
-	}
-
-	result := []rune(str)
-	result[idx] = chr
-	return string(result)
+	return str[:idx] + string(chr) + str[idx+1:]
 }
 
-func RuleTransform(str string, n int) string {
-	// NOTE: maybe iterate over the entire word instead
-	//       and randomly select from [0, 1]
-	//       to determine if the transformation will be done or not
-	if len(str) < n {
-		log.Fatalln("[ERROR]: Word is shorter than number of transforms.")
-	}
+func RuleTransform(str string) string {
+	for i, el := range str {
+		transformChance := rand.Float64()
 
-	for i := 0; i < n; i++ {
-		idx := rand.Intn(len(str))
+		if transformChance < 0.3 {
+			continue
+		}
 
-		if i & 2 == 0 {
-			chr := CaseTransform(rune(str[idx]))
-			str = ReplaceAtIndex(str, chr, idx)
+		transformType := rand.Intn(2)
+
+		if transformType == 0 {
+			chr := CaseTransform(el)
+			str = ReplaceAtIndex(str, chr, i)
 		} else {
-			chr, inRules := ruleSet[rune(str[idx])]
+			chr, inRules := ruleSet[el]
 
 			if !inRules {
 				continue
 			}
 
-			str = ReplaceAtIndex(str, chr, idx)
+			str = ReplaceAtIndex(str, chr, i)
 		}
 	}
 
