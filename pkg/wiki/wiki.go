@@ -127,25 +127,25 @@ func GetArticleContent(title string) string {
 
 func ExtractWords(content string) []string {
 	fullExtracted := strings.FieldsFunc(content, func(r rune) bool {
-		return (r == ' ' ||
-			r == '\n'  ||
-			r == ','  ||
-			r == '.'  ||
-			r == '\'' ||
-			r == '"'  ||
-			r == ':'  ||
-			r == '/'  ||
-			r == '\\' ||
-			r == '{'  ||
-			r == '}'  ||
-			r == '('  ||
-			r == ')'  ||
-			r == '['  ||
-			r == ']'  ||
-			r == '|'  ||
-			r == '<'  ||
-			r == '>'  ||
-			r == '='  )
+		return (r == ' '  ||
+			    r == '\n' ||
+			    r == ','  ||
+			    r == '.'  ||
+			    r == '\'' ||
+			    r == '"'  ||
+			    r == ':'  ||
+			    r == '/'  ||
+			    r == '\\' ||
+			    r == '{'  ||
+			    r == '}'  ||
+			    r == '('  ||
+			    r == ')'  ||
+			    r == '['  ||
+			    r == ']'  ||
+			    r == '|'  ||
+			    r == '<'  ||
+			    r == '>'  ||
+			    r == '='  )
 	})
 
 	var wordList []string
