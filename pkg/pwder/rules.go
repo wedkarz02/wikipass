@@ -34,6 +34,10 @@ func CaseTransform(chr rune) rune {
 }
 
 func ReplaceAtIndex(str string, chr rune, idx int) string {
+	if len(str) <= idx {
+		log.Fatalln("[ERROR]: Invalid index provided.")
+	}
+
 	result := []rune(str)
 	result[idx] = chr
 	return string(result)
@@ -44,8 +48,8 @@ func RuleTransform(str string, n int) string {
 		log.Fatalln("[ERROR]: Word is shorter than number of transforms.")
 	}
 
-	for n > 0 {
-		idx := rand.Intn(len(str))
+	for i := 0; i < n; i++ {
+		idx := rand.Intn(len(str) - 2) + 2
 
 		if n & 2 == 0 {
 			chr := CaseTransform(rune(str[idx]))
@@ -59,8 +63,6 @@ func RuleTransform(str string, n int) string {
 
 			str = ReplaceAtIndex(str, chr, idx)
 		}
-
-		n--
 	}
 
 	return str
