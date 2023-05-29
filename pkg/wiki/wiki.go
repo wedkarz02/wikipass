@@ -1,7 +1,6 @@
 package wiki
 
 import (
-	"fmt"
 	"log"
 	"strings"
 
@@ -51,12 +50,10 @@ func GetRandArticle() string {
 	titleSplit := strings.Split(title, ":")
 	title = titleSplit[len(titleSplit)-1]
 
-	fmt.Println(title)
-
 	return title
 }
 
-func GetArticleContent(title string) {
+func GetArticleContent(title string) string {
 	wiki, err := mwclient.New("https://en.wikipedia.org/w/api.php", "wikiGetContent")
 
 	if err != nil {
@@ -93,8 +90,7 @@ func GetArticleContent(title string) {
 
 	if _, err := pages[0].GetBoolean("missing"); err == nil {
 		panicTitle := GetRandArticle()
-		GetArticleContent(panicTitle)
-		return
+		return GetArticleContent(panicTitle)
 	}
 
 	revisions, err := pages[0].GetObjectArray("revisions")
@@ -121,11 +117,44 @@ func GetArticleContent(title string) {
 		log.Fatalln("[ERROR]: Content parsing failed: ", err)
 	}
 
-	if strings.Contains(content, "#REDIRECT") {
+	if strings.Contains(content, "#REDIRECT") || strings.Contains(content, "#redirect") {
 		panicTitle := GetRandArticle()
-		GetArticleContent(panicTitle)
-		return
+		return GetArticleContent(panicTitle)
 	}
 
-	fmt.Println(content)
+	return content
+}
+
+func ExtractWords(content string) []string {
+	fullExtracted := strings.FieldsFunc(content, func(r rune) bool {
+		return (r == ' ' ||
+			r == '\n'  ||
+			r == ','  ||
+			r == '.'  ||
+			r == '\'' ||
+			r == '"'  ||
+			r == ':'  ||
+			r == '/'  ||
+			r == '\\' ||
+			r == '{'  ||
+			r == '}'  ||
+			r == '('  ||
+			r == ')'  ||
+			r == '['  ||
+			r == ']'  ||
+			r == '|'  ||
+			r == '<'  ||
+			r == '>'  ||
+			r == '='  )
+	})
+
+	var wordList []string
+
+	for _, str := range fullExtracted {
+		if len(str) > 4 && len(str) < 15 {
+			wordList = append(wordList, str)
+		}
+	}
+
+	return wordList
 }
