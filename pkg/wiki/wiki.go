@@ -134,6 +134,7 @@ func ExtractWords(content string) []string {
 			    r == '\'' ||
 			    r == '"'  ||
 			    r == ':'  ||
+			    r == ';'  ||
 			    r == '/'  ||
 			    r == '\\' ||
 			    r == '{'  ||
@@ -145,7 +146,8 @@ func ExtractWords(content string) []string {
 			    r == '|'  ||
 			    r == '<'  ||
 			    r == '>'  ||
-			    r == '='  )
+			    r == '='  ||
+			    r == '-'  )
 	})
 
 	var wordList []string

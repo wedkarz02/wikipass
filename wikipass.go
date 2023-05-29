@@ -4,18 +4,19 @@ import (
 	"fmt"
 	"wikipass/pkg/aeswrapper"
 	"wikipass/pkg/consts"
-	"wikipass/pkg/wiki"
+	"wikipass/pkg/pwder"
 )
 
 func main() {
 	aeswrapper.InitSecretDir(consts.SecretDir, consts.IVFile, 32)
 
-	title := wiki.GetRandArticle()
-	content := wiki.GetArticleContent(title)
-
-	arr := wiki.ExtractWords(content)
-
-	for _, el := range arr {
-		fmt.Println(el)
+	word := "aAbggSeRllkK"
+	fmt.Println(word)
+	
+	for i, chr := range word {
+		repl := pwder.CaseTransform(chr)
+		word = pwder.ReplaceAtIndex(word, repl, i)
 	}
+
+	fmt.Println(word)
 }
