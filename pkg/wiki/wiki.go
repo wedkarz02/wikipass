@@ -2,6 +2,7 @@ package wiki
 
 import (
 	"log"
+	"regexp"
 	"strings"
 
 	"cgt.name/pkg/go-mwclient"
@@ -127,32 +128,40 @@ func GetArticleContent(title string) string {
 
 func ExtractWords(content string) []string {
 	fullExtracted := strings.FieldsFunc(content, func(r rune) bool {
-		return (r == ' '  ||
-			    r == '\n' ||
-			    r == ','  ||
-			    r == '.'  ||
-			    r == '\'' ||
-			    r == '"'  ||
-			    r == ':'  ||
-			    r == ';'  ||
-			    r == '/'  ||
-			    r == '\\' ||
-			    r == '{'  ||
-			    r == '}'  ||
-			    r == '('  ||
-			    r == ')'  ||
-			    r == '['  ||
-			    r == ']'  ||
-			    r == '|'  ||
-			    r == '<'  ||
-			    r == '>'  ||
-			    r == '='  ||
-			    r == '-'  )
+		return (r == ' ' ||
+			r == '\n' ||
+			r == ',' ||
+			r == '.' ||
+			r == '\'' ||
+			r == '"' ||
+			r == ':' ||
+			r == ';' ||
+			r == '/' ||
+			r == '\\' ||
+			r == '{' ||
+			r == '}' ||
+			r == '(' ||
+			r == ')' ||
+			r == '[' ||
+			r == ']' ||
+			r == '|' ||
+			r == '&' ||
+			r == '?' ||
+			r == '<' ||
+			r == '>' ||
+			r == '=' ||
+			r == '-')
 	})
 
 	var wordList []string
 
 	for _, str := range fullExtracted {
+		isAlphanumeric := regexp.MustCompile(`^[a-zA-Z0-9]*$`).MatchString(str)
+
+		if !isAlphanumeric {
+			continue
+		}
+
 		if len(str) > 4 && len(str) < 15 {
 			wordList = append(wordList, str)
 		}
