@@ -12,19 +12,24 @@ With that being said, I cannot guarantee complete security during the generation
 Because of those reasons I definitely do not recommend using this program in public networks. In private ones where no one else has access to your computer it should be fine. \
 Wikipass also happens to be my final project for the *Programming languages* course I am taking at my University.
 
-## Download
+# Download
 To download this project use the *git clone* command from the terminal:
 ```bash
 $ git clone https://github.com/wedkarz02/wikipass.git
 ```
 or use the "Download ZIP" option from the [Github](https://github.com/wedkarz02/wikipass) page and extract the files once downloaded.
 
-## Quick Setup
-Required version of Go:
-```go
-go 1.20
+# Requirements
+ * [Go v1.20+](https://go.dev/dl/)
+ * [SDL2](https://github.com/libsdl-org/SDL/releases)
+ * [Linux OS (preferably)](https://ubuntu.com/download)
+
+To download SDL2 run the *getsdl.sh* script **with sudo privileges** from the terminal:
+```bash
+$ sudo ./scripts/getsdl.sh
 ```
 
+# Quick Setup
 Build the project by 'cd-ing' into the *wikipass/* directory and using the *go build* command from the terminal:
 ```bash
 $ cd wikipass/

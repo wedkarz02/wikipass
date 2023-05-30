@@ -1,6 +1,3 @@
 
-# Executable output file
-/build/app
-
 # Directory with encrypted data
 secret/
