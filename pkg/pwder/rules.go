@@ -5,6 +5,8 @@ import (
 	"unicode"
 )
 
+var extraSet string = "!@#$%^&*?"
+
 var ruleSet = map[rune]rune{
 	'a': '4',
 	'A': '4',
@@ -38,7 +40,7 @@ func ReplaceAtIndex(str string, chr rune, idx int) string {
 
 func RuleTransform(str string) string {
 	for i, el := range str {
-		transformChance := rand.Float64()
+		transformChance := rand.Float32()
 
 		if transformChance < 0.3 {
 			continue
@@ -58,6 +60,13 @@ func RuleTransform(str string) string {
 
 			str = ReplaceAtIndex(str, chr, i)
 		}
+	}
+
+	extraChance := rand.Float32()
+
+	if extraChance >= 0.5 {
+		randChr := extraSet[rand.Intn(len(extraSet))]
+		str = str + string(randChr)
 	}
 
 	return str
