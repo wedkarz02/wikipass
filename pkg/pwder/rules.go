@@ -8,7 +8,7 @@ import (
 var extraSet string = "!@#$%^&*?"
 
 var ruleSet = map[rune]rune{
-	'a': '4',
+	'a': '@',
 	'A': '4',
 	'b': '8',
 	'B': '8',
@@ -64,7 +64,7 @@ func RuleTransform(str string) string {
 
 	extraChance := rand.Float32()
 
-	if extraChance >= 0.5 {
+	if extraChance > 0.6 {
 		randChr := extraSet[rand.Intn(len(extraSet))]
 		str = str + string(randChr)
 	}

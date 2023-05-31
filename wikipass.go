@@ -2,21 +2,32 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"wikipass/pkg/aeswrapper"
 	"wikipass/pkg/consts"
 	"wikipass/pkg/pwder"
-	"wikipass/pkg/wiki"
 )
 
 func main() {
 	aeswrapper.InitSecretDir(consts.SecretDir, consts.IVFile, 32)
+	var wg sync.WaitGroup
+	var passwords []string
+	passwdChan := make(chan string)
 
-	title := wiki.GetRandArticle()
-	content := wiki.GetArticleContent(title)
-	wordList := wiki.ExtractWords(content)
+	n := 5
 
-	for _, word := range wordList {
-		word = pwder.RuleTransform(word)
-		fmt.Println(word)
+	for i := 0; i < n; i++ {
+		wg.Add(1)
+		go pwder.GenPassword(passwdChan, &wg)
+	}
+
+	for i := 0; i < n; i++ {
+		passwords = append(passwords, <-passwdChan)
+	}
+
+	wg.Wait()
+
+	for _, passwd := range passwords {
+		fmt.Println(passwd)
 	}
 }
