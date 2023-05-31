@@ -1,3 +1,6 @@
 
 # Directory with encrypted data
 secret/
+
+# Compiled executable file
+wikipass
