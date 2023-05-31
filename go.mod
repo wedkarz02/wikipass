@@ -2,7 +2,10 @@ module wikipass
 
 go 1.20
 
-require cgt.name/pkg/go-mwclient v1.2.0
+require (
+	cgt.name/pkg/go-mwclient v1.2.0
+	github.com/veandco/go-sdl2 v0.4.35
+)
 
 require (
 	github.com/antonholmquist/jason v1.0.0 // indirect
