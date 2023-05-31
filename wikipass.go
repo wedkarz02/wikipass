@@ -1,33 +1,50 @@
 package main
 
 import (
-	"fmt"
-	"sync"
-	"wikipass/pkg/aeswrapper"
-	"wikipass/pkg/consts"
-	"wikipass/pkg/pwder"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 func main() {
-	aeswrapper.InitSecretDir(consts.SecretDir, consts.IVFile, 32)
-	var wg sync.WaitGroup
-	var passwords []string
-	passwdChan := make(chan string)
-
-	n := 5
-
-	for i := 0; i < n; i++ {
-		wg.Add(1)
-		go pwder.GenPassword(passwdChan, &wg)
+	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
+		panic(err)
 	}
 
-	for i := 0; i < n; i++ {
-		passwords = append(passwords, <-passwdChan)
+	defer sdl.Quit()
+
+	window, err := sdl.CreateWindow("test",
+		sdl.WINDOWPOS_UNDEFINED,
+		sdl.WINDOWPOS_UNDEFINED,
+		800, 600,
+		sdl.WINDOW_SHOWN)
+
+	if err != nil {
+		panic(err)
 	}
 
-	wg.Wait()
+	defer window.Destroy()
 
-	for _, passwd := range passwords {
-		fmt.Println(passwd)
+	surface, err := window.GetSurface()
+
+	if err != nil {
+		panic(err)
+	}
+
+	surface.FillRect(nil, 0)
+
+	rect := sdl.Rect{X: 0, Y: 0, W: 200, H: 200}
+	color := sdl.Color{R: 0, G: 255, B: 0, A: 255}
+	pixel := sdl.MapRGBA(surface.Format, color.R, color.G, color.B, color.A)
+	surface.FillRect(&rect, pixel)
+
+	window.UpdateSurface()
+
+	running := true
+	for running {
+		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
+			switch event.(type) {
+			case *sdl.QuitEvent:
+				running = false
+			}
+		}
 	}
 }
