@@ -4,3 +4,6 @@ secret/
 
 # Compiled executable file
 wikipass
+
+# Output file for testing purposes
+data.txt
