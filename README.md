@@ -1,4 +1,4 @@
-# wikipass
+# Wikipass
 
 **Please keep in mind that this project is still a work in progress, therefore it may contain bugs, missing features and security flaws.**
 
@@ -21,12 +21,12 @@ or use the "Download ZIP" option from the [Github](https://github.com/wedkarz02/
 
 # Requirements
  * [Go v1.20+](https://go.dev/dl/)
- * [SDL2](https://github.com/libsdl-org/SDL/releases)
+ * [raylib-go](https://github.com/gen2brain/raylib-go)
  * [Linux OS (preferably)](https://ubuntu.com/download)
 
-To download SDL2 run the *getsdl.sh* script **with sudo privileges** from the terminal:
+To download [raylib-go](https://github.com/gen2brain/raylib-go) run the *getrl.sh* script **with sudo privileges** from the terminal:
 ```bash
-$ sudo ./scripts/getsdl.sh
+$ sudo ./scripts/getrl.sh
 ```
 
 # Quick Setup
@@ -35,6 +35,7 @@ Build the project by 'cd-ing' into the *wikipass/* directory and using the *go b
 $ cd wikipass/
 $ go build
 ```
+Please keep in mind that the first use of [raylib-go](https://github.com/gen2brain/raylib-go) might take a while to compile.\
 Open the app by running the compiled executable file:
 ```bash
 $ ./wikipass

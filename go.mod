@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	cgt.name/pkg/go-mwclient v1.2.0
-	github.com/veandco/go-sdl2 v0.4.35
+	github.com/gen2brain/raylib-go/raylib v0.0.0-20230511170620-d84e4cc82f8d
 )
 
 require (
