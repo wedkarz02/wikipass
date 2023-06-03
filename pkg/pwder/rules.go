@@ -42,7 +42,7 @@ func RuleTransform(str string) string {
 	for i, el := range str {
 		transformChance := rand.Float32()
 
-		if transformChance < 0.3 {
+		if transformChance < 0.75 {
 			continue
 		}
 

@@ -12,10 +12,6 @@ func InitWordList() []string {
 	content := wiki.GetArticleContent(title)
 	wordList := wiki.ExtractWords(content)
 
-	for i, word := range wordList {
-		wordList[i] = RuleTransform(word)
-	}
-
 	return wordList
 }
 
@@ -42,7 +38,8 @@ func GenPassword(ch chan<- string, wg *sync.WaitGroup) {
 			randIdx = rand.Intn(len(wordList))
 		}
 
-		words = append(words, wordList[randIdx])
+		transformedWord := RuleTransform(wordList[randIdx])
+		words = append(words, transformedWord)
 	}
 
 	ch <- strings.Join(words, "-")
