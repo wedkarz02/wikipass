@@ -14,10 +14,7 @@ func main() {
 	defer rl.CloseWindow()
 	rl.SetTargetFPS(60)
 
-	logo := rl.LoadImage("./assets/logo.png")
-	rl.ImageResize(logo, c.LogoWidth, c.LogoHeight)
-	txtLogo := rl.LoadTextureFromImage(logo)
-	rl.UnloadImage(logo)
+	logo := gui.InitLogo()
 
 	fontBold := rl.LoadFontEx("./assets/fonts/arialbd.ttf", 40, nil)
 	fontJBMB := rl.LoadFontEx("./assets/fonts/JetBrainsMono-Bold.ttf", 40, nil)
@@ -42,7 +39,7 @@ func main() {
 		rl.BeginDrawing()
 		rl.ClearBackground(gui.DarkGreyColor)
 
-		rl.DrawTexture(txtLogo, c.LogWindowWidth/2-c.LogoWidth/2, 60, rl.White)
+		rl.DrawTexture(logo, c.LogWindowWidth/2-c.LogoWidth/2, 60, rl.White)
 
 		rl.DrawTextEx(fontBold,
 			text,
