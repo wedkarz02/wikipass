@@ -23,7 +23,7 @@ func main() {
 	textSize := rl.MeasureTextEx(fontBold, text, 32, 0)
 
 	textX := c.LogWindowWidth/2 - textSize.X/2
-	textY := c.LogWindowHeight/2 - 75
+	textY := c.LogWindowHeight/2 - 65
 
 	var inputText []string
 
