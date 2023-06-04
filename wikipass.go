@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	c "wikipass/pkg/consts"
+	"wikipass/pkg/gui"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
@@ -13,72 +14,47 @@ func main() {
 	defer rl.CloseWindow()
 	rl.SetTargetFPS(60)
 
-	font := rl.LoadFontEx("./assets/fonts/JetBrainsMono-Bold.ttf", 40, nil)
+	logo := rl.LoadImage("./assets/logo.png")
+	rl.ImageResize(logo, c.LogoWidth, c.LogoHeight)
+	txtLogo := rl.LoadTextureFromImage(logo)
+	rl.UnloadImage(logo)
 
-	bgColor := rl.Color{R: 0x2F, G: 0x36, B: 0x3D, A: 0xFF}
-	textColor := rl.Color{R: 0xD1, G: 0xD5, B: 0xDA, A: 0xFF}
+	fontBold := rl.LoadFontEx("./assets/fonts/arialbd.ttf", 40, nil)
+	fontJBMB := rl.LoadFontEx("./assets/fonts/JetBrainsMono-Bold.ttf", 40, nil)
 
-	text := "Input your\nmaster password:"
-	textSize := rl.MeasureTextEx(font, text, 40, 0)
+	text := "Enter Master Password"
+	textSize := rl.MeasureTextEx(fontBold, text, 32, 0)
 
 	textX := c.LogWindowWidth/2 - textSize.X/2
-	textY := c.LogWindowHeight/2 - textSize.Y/2 - 80
+	textY := c.LogWindowHeight/2 - 75
 
 	var inputText []string
-	var hidden []string
 
-	textBox := rl.Rectangle{X: c.LogWindowWidth * 0.12,
-		Y:      c.LogWindowHeight/2 - 25,
-		Width:  c.LogWindowWidth * 0.75,
-		Height: 50}
-
-	mouseOnText := false
+	textBox := gui.InitTextBox(c.LogWindowWidth*0.08,
+		c.LogWindowHeight/2,
+		c.LogWindowWidth*0.84,
+		50)
 
 	for !rl.WindowShouldClose() {
-		if rl.CheckCollisionPointRec(rl.GetMousePosition(), textBox) {
-			mouseOnText = true
-		} else {
-			mouseOnText = false
-		}
-
-		if mouseOnText {
-			rl.SetMouseCursor(rl.MouseCursorIBeam)
-		} else {
-			rl.SetMouseCursor(rl.MouseCursorDefault)
-		}
-
-		key := rl.GetCharPressed()
-
-		for key > 0 {
-			if key > 32 && key < 125 {
-				inputText = append(inputText, string(key))
-				hidden = append(hidden, "*")
-			}
-
-			key = rl.GetCharPressed()
-		}
-
-		if rl.IsKeyPressed(rl.KeyBackspace) {
-			if len(inputText) > 0 {
-				inputText = inputText[:len(inputText)-1]
-				hidden = hidden[:len(hidden)-1]
-			}
-		}
+		gui.TextBoxCursorType(textBox)
+		gui.UpdateInput(&inputText)
 
 		rl.BeginDrawing()
+		rl.ClearBackground(gui.DarkGreyColor)
 
-		rl.ClearBackground(bgColor)
-		rl.DrawTextEx(font,
+		rl.DrawTexture(txtLogo, c.LogWindowWidth/2-c.LogoWidth/2, 60, rl.White)
+
+		rl.DrawTextEx(fontBold,
 			text,
-			rl.Vector2{X: textX, Y: textY},
-			40, 0, textColor)
+			rl.Vector2{X: textX, Y: float32(textY)},
+			32, 0, gui.WhiteColor)
 
-		rl.DrawRectangleRec(textBox, rl.LightGray)
-		rl.DrawRectangleLinesEx(textBox, 1, rl.Black)
-
-		rl.DrawTextEx(font, strings.Join(hidden, ""),
-			rl.Vector2{X: textBox.X + 5, Y: textBox.Y + 8},
-			40, 0, rl.Black)
+		gui.DrawTextBox(textBox,
+			strings.Join(inputText, ""),
+			fontJBMB,
+			20, gui.BlackColor,
+			gui.WhiteColor,
+			true)
 
 		rl.EndDrawing()
 	}

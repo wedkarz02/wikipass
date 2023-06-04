@@ -8,5 +8,8 @@ const (
 
 const (
 	LogWindowWidth  = 400
-	LogWindowHeight = 550
+	LogWindowHeight = 500
+
+	LogoWidth  = 90
+	LogoHeight = 90
 )
