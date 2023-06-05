@@ -7,7 +7,7 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-func InitTextBox(x int, y int, w int, h int) rl.Rectangle {
+func InitRect(x int, y int, w int, h int) rl.Rectangle {
 	return rl.Rectangle{X: float32(x), Y: float32(y), Width: float32(w), Height: float32(h)}
 }
 
@@ -76,4 +76,30 @@ func DrawTextBox(tb rl.Rectangle,
 			float32(fontSize), 0,
 			textColor)
 	}
+}
+
+func DrawButton(btn rl.Rectangle,
+	text string,
+	font rl.Font,
+	fontSize float32,
+	btnColor rl.Color,
+	hoverColor rl.Color,
+	textColor rl.Color) {
+
+	size := rl.MeasureTextEx(font, text, fontSize, 0)
+	textPos := rl.Vector2{
+		X: c.LogWindowWidth/2 - size.X/2,
+		Y: btn.Y + btn.Height/2 - size.Y/2,
+	}
+
+	if RectMouseCollision(btn) {
+		rl.DrawRectangleRec(btn, hoverColor)
+	} else {
+		rl.DrawRectangleRec(btn, btnColor)
+	}
+
+	rl.DrawTextEx(font, text,
+		textPos,
+		fontSize, 0,
+		textColor)
 }

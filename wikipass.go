@@ -27,10 +27,15 @@ func main() {
 
 	var inputText []string
 
-	textBox := gui.InitTextBox(c.LogWindowWidth*0.08,
+	textBox := gui.InitRect(c.LogWindowWidth*0.08,
 		c.LogWindowHeight/2,
 		c.LogWindowWidth*0.84,
 		50)
+	
+	unlockBtn := gui.InitRect(int(textBox.X),
+		int(textBox.Y) + 80,
+		int(textBox.Width),
+		int(textBox.Height))
 
 	for !rl.WindowShouldClose() {
 		gui.TextBoxCursorType(textBox)
@@ -52,6 +57,14 @@ func main() {
 			20, gui.BlackColor,
 			gui.WhiteColor,
 			true)
+		
+		gui.DrawButton(unlockBtn,
+			"Unlock Wikipass",
+			fontBold,
+			24,
+			gui.TintColor,
+			gui.DarkTintColor,
+			gui.WhiteColor)
 
 		rl.EndDrawing()
 	}
