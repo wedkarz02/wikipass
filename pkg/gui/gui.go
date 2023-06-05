@@ -1,16 +1,8 @@
 package gui
 
 import (
-	c "wikipass/pkg/consts"
-
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
-
-func InitApp() {
-	rl.InitWindow(c.LogWindowWidth, c.LogWindowHeight, "Wikipass")
-	defer rl.CloseWindow()
-	rl.SetTargetFPS(60)
-}
 
 func UpdateInput(textData *[]string) {
 	key := rl.GetCharPressed()

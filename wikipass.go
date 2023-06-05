@@ -20,7 +20,9 @@ func CheckDirExists(path string) bool {
 }
 
 func main() {
-	gui.InitApp()
+	rl.InitWindow(c.LogWindowWidth, c.LogWindowHeight, "Wikipass")
+	defer rl.CloseWindow()
+	rl.SetTargetFPS(60)
 
 	logo := gui.InitLogo()
 
