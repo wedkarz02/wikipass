@@ -3,8 +3,10 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"strings"
+	"wikipass/pkg/aeswrapper"
 	c "wikipass/pkg/consts"
 	"wikipass/pkg/gui"
 
@@ -17,6 +19,14 @@ func CheckDirExists(path string) bool {
 	}
 
 	return true
+}
+
+func RmDir(path string) {
+	err := os.RemoveAll(path)
+
+	if err != nil {
+		log.Fatalln("[ERROR]: Directory deletion failed: ", err)
+	}
 }
 
 func main() {
@@ -41,9 +51,9 @@ func main() {
 		c.LogWindowHeight/2,
 		c.LogWindowWidth*0.84,
 		50)
-	
+
 	unlockBtn := gui.InitRect(int(textBox.X),
-		int(textBox.Y) + 80,
+		int(textBox.Y)+80,
 		int(textBox.Width),
 		int(textBox.Height))
 
@@ -52,8 +62,13 @@ func main() {
 		gui.UpdateInput(&inputText)
 
 		gui.ButtonAction(unlockBtn, func() {
-			fmt.Println(strings.Join(inputText, ""), CheckDirExists(c.SecretDir))
+			fmt.Println(strings.Join(inputText, ""))
 
+			if CheckDirExists(c.SecretDir) {
+				RmDir(c.SecretDir)
+			} else {
+				aeswrapper.InitSecretDir(c.SecretDir, c.IVFile, 32)
+			}
 		})
 
 		rl.BeginDrawing()
@@ -72,7 +87,7 @@ func main() {
 			20, gui.BlackColor,
 			gui.WhiteColor,
 			true)
-		
+
 		gui.DrawButton(unlockBtn,
 			"Unlock Wikipass",
 			fontBold,
