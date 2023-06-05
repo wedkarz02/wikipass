@@ -1,13 +1,23 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"os"
 	"strings"
 	c "wikipass/pkg/consts"
 	"wikipass/pkg/gui"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
+
+func CheckDirExists(path string) bool {
+	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
+		return false
+	}
+
+	return true
+}
 
 func main() {
 	rl.InitWindow(c.LogWindowWidth, c.LogWindowHeight, "Wikipass")
@@ -42,7 +52,8 @@ func main() {
 		gui.UpdateInput(&inputText)
 
 		gui.ButtonAction(unlockBtn, func() {
-			fmt.Println(strings.Join(inputText, ""))
+			fmt.Println(strings.Join(inputText, ""), CheckDirExists(c.SecretDir))
+
 		})
 
 		rl.BeginDrawing()
