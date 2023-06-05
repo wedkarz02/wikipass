@@ -22,3 +22,29 @@ func UpdateInput(textData *[]string) {
 		}
 	}
 }
+
+func RectMouseCollision(tb rl.Rectangle) bool {
+	return rl.CheckCollisionPointRec(rl.GetMousePosition(), tb)
+}
+
+func TextBoxCursorType(tb rl.Rectangle) {
+	if RectMouseCollision(tb) {
+		rl.SetMouseCursor(rl.MouseCursorIBeam)
+	} else {
+		rl.SetMouseCursor(rl.MouseCursorDefault)
+	}
+}
+
+func ButtonAction(btn rl.Rectangle, callBack func()) {
+	if RectMouseCollision(btn) {
+		if rl.IsMouseButtonPressed(rl.MouseLeftButton) {
+			callBack()
+			return
+		}
+	}
+
+	if rl.IsKeyPressed(rl.KeyEnter) {
+		callBack()
+		return
+	}
+}

@@ -20,18 +20,6 @@ func InitLogo() rl.Texture2D {
 	return txtLogo
 }
 
-func RectMouseCollision(tb rl.Rectangle) bool {
-	return rl.CheckCollisionPointRec(rl.GetMousePosition(), tb)
-}
-
-func TextBoxCursorType(tb rl.Rectangle) {
-	if RectMouseCollision(tb) {
-		rl.SetMouseCursor(rl.MouseCursorIBeam)
-	} else {
-		rl.SetMouseCursor(rl.MouseCursorDefault)
-	}
-}
-
 func DrawTextBox(tb rl.Rectangle,
 	text string,
 	font rl.Font,

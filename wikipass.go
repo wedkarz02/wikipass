@@ -41,6 +41,10 @@ func main() {
 		gui.TextBoxCursorType(textBox)
 		gui.UpdateInput(&inputText)
 
+		gui.ButtonAction(unlockBtn, func() {
+			fmt.Println(strings.Join(inputText, ""))
+		})
+
 		rl.BeginDrawing()
 		rl.ClearBackground(gui.DarkGreyColor)
 
@@ -68,6 +72,4 @@ func main() {
 
 		rl.EndDrawing()
 	}
-
-	fmt.Println(strings.Join(inputText, ""))
 }
