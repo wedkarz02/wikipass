@@ -20,49 +20,49 @@ func InitLogo() rl.Texture2D {
 	return txtLogo
 }
 
-func DrawTextBox(tb rl.Rectangle,
-	text string,
-	font rl.Font,
-	fontSize float32,
-	tbColor rl.Color,
-	textColor rl.Color,
-	hidden bool) {
-
+func DrawTextBox(tb rl.Rectangle, text *Text, tbColor rl.Color, hidden bool) {
+	// updates actual var in main instead of local string
+	// figure this out asap
 	if hidden {
-		text = strings.Repeat("*", len(text))
+		text.Content = strings.Repeat("*", len(text.Content))
 	}
 
-	size := rl.MeasureTextEx(font, text, fontSize, 0)
-	charSize := rl.MeasureTextEx(font, " ", fontSize, 0)
+	size := text.Size()
+	charSize := rl.MeasureTextEx(text.Font, " ", float32(text.FontSize), 0)
+	maxLen := int(tb.Width/charSize.X) - 2
+
 	time := rl.GetTime()
 	fracTime := time - float64(int(time))
-
-	maxLen := int(tb.Width/charSize.X) - 2
 
 	rl.DrawRectangleRec(tb, tbColor)
 	rl.DrawRectangleLinesEx(tb, 3.0, rl.Gray)
 
-	rl.DrawTextEx(font, "Master Password",
+	rl.DrawTextEx(text.Font,
+		"Master Password",
 		rl.Vector2{X: tb.X + 10, Y: tb.Y + 6},
 		20, 0,
 		Grey)
 
-	if len(text) < maxLen {
-		rl.DrawTextEx(font, text,
+	if len(text.Content) < maxLen {
+		rl.DrawTextEx(text.Font,
+			text.Content,
 			rl.Vector2{X: tb.X + 10, Y: tb.Y + 24},
-			float32(fontSize), 0,
-			textColor)
+			float32(text.FontSize), 0,
+			text.Color)
 
 		if fracTime > 0.5 {
-			rl.DrawTextEx(font, "|",
+			rl.DrawTextEx(text.Font,
+				"|",
 				rl.Vector2{X: tb.X + 10 + size.X, Y: tb.Y + 24},
-				float32(fontSize), 0, textColor)
+				float32(text.FontSize), 0,
+				text.Color)
 		}
 	} else {
-		rl.DrawTextEx(font, text[:maxLen],
+		rl.DrawTextEx(text.Font,
+			text.Content[:maxLen],
 			rl.Vector2{X: tb.X + 10, Y: tb.Y + 24},
-			float32(fontSize), 0,
-			textColor)
+			float32(text.FontSize), 0,
+			text.Color)
 	}
 }
 

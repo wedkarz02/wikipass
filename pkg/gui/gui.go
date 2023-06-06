@@ -4,21 +4,31 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-func UpdateInput(textData *[]string) {
+type Text struct {
+	Content  string
+	Font     rl.Font
+	FontSize int
+	Color    rl.Color
+}
+
+func (text *Text) Size() rl.Vector2 {
+	return rl.MeasureTextEx(text.Font, text.Content, float32(text.FontSize), 0)
+}
+
+func (text *Text) UpdateContent() {
 	key := rl.GetCharPressed()
 
 	for key > 0 {
 		if key > 32 && key < 125 {
-			*textData = append(*textData, string(key))
+			text.Content += string(key)
 		}
 
 		key = rl.GetCharPressed()
 	}
 
 	if rl.IsKeyPressed(rl.KeyBackspace) {
-		tmpText := []string(*textData)
-		if len(tmpText) > 0 {
-			*textData = tmpText[:len(tmpText)-1]
+		if len(text.Content) > 0 {
+			text.Content = text.Content[:len(text.Content)-1]
 		}
 	}
 }

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 	"wikipass/pkg/aeswrapper"
 	c "wikipass/pkg/consts"
 	"wikipass/pkg/gui"
@@ -39,13 +38,17 @@ func main() {
 	fontBold := rl.LoadFontEx("./assets/fonts/arialbd.ttf", 40, nil)
 	fontJBMB := rl.LoadFontEx("./assets/fonts/JetBrainsMono-Bold.ttf", 40, nil)
 
-	text := "Enter Master Password"
-	textSize := rl.MeasureTextEx(fontBold, text, 32, 0)
+	welcomeText := gui.Text{Content: "Enter Master Password",
+		Font:     fontBold,
+		FontSize: 32,
+		Color:    gui.WhiteColor,
+	}
 
-	textX := c.LogWindowWidth/2 - textSize.X/2
-	textY := c.LogWindowHeight/2 - 65
-
-	var inputText []string
+	inputText := gui.Text{Content: "",
+		Font:     fontJBMB,
+		FontSize: 20,
+		Color:    gui.WhiteColor,
+	}
 
 	textBox := gui.InitRect(c.LogWindowWidth*0.08,
 		c.LogWindowHeight/2,
@@ -59,10 +62,10 @@ func main() {
 
 	for !rl.WindowShouldClose() {
 		gui.TextBoxCursorType(textBox)
-		gui.UpdateInput(&inputText)
+		inputText.UpdateContent()
 
 		gui.ButtonAction(unlockBtn, func() {
-			fmt.Println(strings.Join(inputText, ""))
+			fmt.Println(inputText.Content)
 
 			if CheckDirExists(c.SecretDir) {
 				RmDir(c.SecretDir)
@@ -76,17 +79,13 @@ func main() {
 
 		rl.DrawTexture(logo, c.LogWindowWidth/2-c.LogoWidth/2, 60, rl.White)
 
-		rl.DrawTextEx(fontBold,
-			text,
-			rl.Vector2{X: textX, Y: float32(textY)},
-			32, 0, gui.WhiteColor)
+		rl.DrawTextEx(welcomeText.Font,
+			welcomeText.Content,
+			welcomeText.Size(),
+			float32(welcomeText.FontSize), 0,
+			welcomeText.Color)
 
-		gui.DrawTextBox(textBox,
-			strings.Join(inputText, ""),
-			fontJBMB,
-			20, gui.BlackColor,
-			gui.WhiteColor,
-			true)
+		gui.DrawTextBox(textBox, &inputText, gui.BlackColor, true)
 
 		gui.DrawButton(unlockBtn,
 			"Unlock Wikipass",
