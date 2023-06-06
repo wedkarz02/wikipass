@@ -21,10 +21,10 @@ func InitLogo() rl.Texture2D {
 }
 
 func DrawTextBox(tb rl.Rectangle, text *Text, tbColor rl.Color, hidden bool) {
-	// updates actual var in main instead of local string
-	// figure this out asap
+	msg := text.Content
+
 	if hidden {
-		text.Content = strings.Repeat("*", len(text.Content))
+		msg = strings.Repeat("*", len(msg))
 	}
 
 	size := text.Size()
@@ -43,9 +43,9 @@ func DrawTextBox(tb rl.Rectangle, text *Text, tbColor rl.Color, hidden bool) {
 		20, 0,
 		Grey)
 
-	if len(text.Content) < maxLen {
+	if len(msg) < maxLen {
 		rl.DrawTextEx(text.Font,
-			text.Content,
+			msg,
 			rl.Vector2{X: tb.X + 10, Y: tb.Y + 24},
 			float32(text.FontSize), 0,
 			text.Color)
@@ -59,7 +59,7 @@ func DrawTextBox(tb rl.Rectangle, text *Text, tbColor rl.Color, hidden bool) {
 		}
 	} else {
 		rl.DrawTextEx(text.Font,
-			text.Content[:maxLen],
+			msg[:maxLen],
 			rl.Vector2{X: tb.X + 10, Y: tb.Y + 24},
 			float32(text.FontSize), 0,
 			text.Color)

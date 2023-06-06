@@ -81,7 +81,8 @@ func main() {
 
 		rl.DrawTextEx(welcomeText.Font,
 			welcomeText.Content,
-			welcomeText.Size(),
+			rl.Vector2{X: c.LogWindowWidth/2 - welcomeText.Size().X/2,
+				Y: c.LogWindowHeight/2 - 65},
 			float32(welcomeText.FontSize), 0,
 			welcomeText.Color)
 
