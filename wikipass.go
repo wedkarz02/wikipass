@@ -91,12 +91,13 @@ func main() {
 		gui.DrawTextBox(textBox, &inputText, gui.BlackColor, true)
 
 		gui.DrawButton(unlockBtn,
-			"Unlock Wikipass",
-			fonts["arialb"],
-			24,
+			&gui.Text{
+				Content:  "Unlock Wikipass",
+				Font:     fonts["arialb"],
+				FontSize: 24,
+				Color:    gui.WhiteColor},
 			gui.TintColor,
-			gui.DarkTintColor,
-			gui.WhiteColor)
+			gui.DarkTintColor)
 
 		rl.EndDrawing()
 	}

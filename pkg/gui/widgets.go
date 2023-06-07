@@ -53,15 +53,8 @@ func DrawTextBox(tb rl.Rectangle, text *Text, tbColor rl.Color, hidden bool) {
 	}
 }
 
-func DrawButton(btn rl.Rectangle,
-	text string,
-	font rl.Font,
-	fontSize float32,
-	btnColor rl.Color,
-	hoverColor rl.Color,
-	textColor rl.Color) {
-
-	size := rl.MeasureTextEx(font, text, fontSize, 0)
+func DrawButton(btn rl.Rectangle, text *Text, btnColor rl.Color, hoverColor rl.Color) {
+	size := text.Size()
 	textPos := rl.Vector2{
 		X: c.LogWindowWidth/2 - size.X/2,
 		Y: btn.Y + btn.Height/2 - size.Y/2,
@@ -73,8 +66,9 @@ func DrawButton(btn rl.Rectangle,
 		rl.DrawRectangleRec(btn, btnColor)
 	}
 
-	rl.DrawTextEx(font, text,
+	rl.DrawTextEx(text.Font,
+		text.Content,
 		textPos,
-		fontSize, 0,
-		textColor)
+		float32(text.FontSize), 0,
+		text.Color)
 }
