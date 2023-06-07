@@ -82,6 +82,7 @@ func (li Login) UpdateLogin() {
 		if aeswrapper.CheckDirExists(c.SecretDir) {
 			aeswrapper.RmDir(c.SecretDir)
 		} else {
+			// TODO: Remove this later, it's just to make testing easier
 			aeswrapper.InitSecretDir(c.SecretDir, c.IVFile, 32)
 		}
 	})

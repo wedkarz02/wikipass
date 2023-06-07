@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 )
 
 func CheckDirExists(path string) bool {
@@ -52,7 +53,24 @@ func InitSecretDir(dirPath string, ivPath string, ivSize uint8) {
 	}
 }
 
-func EncryptAES(fileName string, plainText []byte, key []byte) {
+func StringsToByte(str []string) []byte {
+	result := []byte{}
+
+	for _, word := range str {
+		row := []byte(word)
+		row = append(row, byte('\n'))
+		result = append(result, row...)
+	}
+
+	return result
+}
+
+func ByteToStrings(data []byte) []string {
+	return strings.Split(string(data), "\n")
+}
+
+func EncryptAES(fileName string, data []string, key []byte) {
+	byteData := StringsToByte(data)
 	c, err := aes.NewCipher(key)
 
 	if err != nil {
@@ -71,14 +89,14 @@ func EncryptAES(fileName string, plainText []byte, key []byte) {
 		log.Fatalln("[ERROR]: Something went wrong while seeding the nonce: ", err)
 	}
 
-	err = os.WriteFile(fileName, gcm.Seal(nonce, nonce, plainText, nil), 0644)
+	err = os.WriteFile(fileName, gcm.Seal(nonce, nonce, byteData, nil), 0644)
 
 	if err != nil {
 		log.Fatalln("[ERROR]: Something went wrong while writing to the file: ", err)
 	}
 }
 
-func DecryptAES(fileName string, key []byte) []byte {
+func DecryptAES(fileName string, key []byte) ([]string, error) {
 	c, err := aes.NewCipher(key)
 
 	if err != nil {
@@ -107,8 +125,10 @@ func DecryptAES(fileName string, key []byte) []byte {
 	plainText, err := gcm.Open(nil, nonce, cipherText, nil)
 
 	if err != nil {
+		// The tested key is incorrect -> return an empty slice and an error
 		log.Fatalln("[ERROR]: The key is incorrect: ", err)
+		// return []byte{}, err
 	}
 
-	return plainText
+	return ByteToStrings(plainText), nil
 }

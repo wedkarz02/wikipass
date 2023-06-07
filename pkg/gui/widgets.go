@@ -22,7 +22,7 @@ func DrawTextBox(tb rl.Rectangle, text *Text, tbColor rl.Color, hidden bool) {
 	fracTime := time - float64(int(time))
 
 	rl.DrawRectangleRec(tb, tbColor)
-	rl.DrawRectangleLinesEx(tb, 3.0, rl.Gray)
+	rl.DrawRectangleLinesEx(tb, 2.0, rl.Gray)
 
 	rl.DrawTextEx(text.Font,
 		"Master Password",
