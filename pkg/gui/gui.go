@@ -1,8 +1,13 @@
 package gui
 
 import (
+	"log"
+	c "wikipass/pkg/consts"
+
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
+
+type Fonts map[string]rl.Font
 
 type Text struct {
 	Content  string
@@ -11,8 +16,34 @@ type Text struct {
 	Color    rl.Color
 }
 
+func (list Fonts) AddFont(name string, alias string, defRes int32) {
+	if _, inFonts := list[alias]; inFonts {
+		log.Fatalln("[ERROR]: Font already loaded!")
+	}
+
+	list[alias] = rl.LoadFontEx("./assets/fonts/"+name+".ttf", defRes, nil)
+}
+
 func (text *Text) Size() rl.Vector2 {
 	return rl.MeasureTextEx(text.Font, text.Content, float32(text.FontSize), 0)
+}
+
+func InitFonts() Fonts {
+	fonts := make(Fonts)
+
+	fonts.AddFont("arialbd", "arialb", 40)
+	fonts.AddFont("JetBrainsMono-Bold", "jbmb", 40)
+
+	return fonts
+}
+
+func InitLogo() rl.Texture2D {
+	logo := rl.LoadImage("./assets/logo.png")
+	rl.ImageResize(logo, c.LogoWidth, c.LogoHeight)
+	txtLogo := rl.LoadTextureFromImage(logo)
+	rl.UnloadImage(logo)
+
+	return txtLogo
 }
 
 func (text *Text) UpdateContent() {

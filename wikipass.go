@@ -34,31 +34,33 @@ func main() {
 	rl.SetTargetFPS(60)
 
 	logo := gui.InitLogo()
-
-	fontBold := rl.LoadFontEx("./assets/fonts/arialbd.ttf", 40, nil)
-	fontJBMB := rl.LoadFontEx("./assets/fonts/JetBrainsMono-Bold.ttf", 40, nil)
+	fonts := gui.InitFonts()
 
 	welcomeText := gui.Text{Content: "Enter Master Password",
-		Font:     fontBold,
+		Font:     fonts["arialb"],
 		FontSize: 32,
 		Color:    gui.WhiteColor,
 	}
 
 	inputText := gui.Text{Content: "",
-		Font:     fontJBMB,
+		Font:     fonts["jbmb"],
 		FontSize: 20,
 		Color:    gui.WhiteColor,
 	}
 
-	textBox := gui.InitRect(c.LogWindowWidth*0.08,
-		c.LogWindowHeight/2,
-		c.LogWindowWidth*0.84,
-		50)
+	textBox := rl.Rectangle{
+		X:      c.LogWindowWidth * 0.08,
+		Y:      c.LogWindowHeight / 2,
+		Width:  c.LogWindowWidth * 0.84,
+		Height: 50,
+	}
 
-	unlockBtn := gui.InitRect(int(textBox.X),
-		int(textBox.Y)+80,
-		int(textBox.Width),
-		int(textBox.Height))
+	unlockBtn := rl.Rectangle{
+		X:      textBox.X,
+		Y:      textBox.Y + 80,
+		Width:  textBox.Width,
+		Height: textBox.Height,
+	}
 
 	for !rl.WindowShouldClose() {
 		gui.TextBoxCursorType(textBox)
@@ -90,7 +92,7 @@ func main() {
 
 		gui.DrawButton(unlockBtn,
 			"Unlock Wikipass",
-			fontBold,
+			fonts["arialb"],
 			24,
 			gui.TintColor,
 			gui.DarkTintColor,

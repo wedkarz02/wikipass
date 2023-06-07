@@ -7,19 +7,6 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-func InitRect(x int, y int, w int, h int) rl.Rectangle {
-	return rl.Rectangle{X: float32(x), Y: float32(y), Width: float32(w), Height: float32(h)}
-}
-
-func InitLogo() rl.Texture2D {
-	logo := rl.LoadImage("./assets/logo.png")
-	rl.ImageResize(logo, c.LogoWidth, c.LogoHeight)
-	txtLogo := rl.LoadTextureFromImage(logo)
-	rl.UnloadImage(logo)
-
-	return txtLogo
-}
-
 func DrawTextBox(tb rl.Rectangle, text *Text, tbColor rl.Color, hidden bool) {
 	msg := text.Content
 
