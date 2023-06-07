@@ -10,6 +10,22 @@ import (
 	"os"
 )
 
+func CheckDirExists(path string) bool {
+	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
+		return false
+	}
+
+	return true
+}
+
+func RmDir(path string) {
+	err := os.RemoveAll(path)
+
+	if err != nil {
+		log.Fatalln("[ERROR]: Directory deletion failed: ", err)
+	}
+}
+
 func InitIV(fileName string, size uint8) {
 	iv := make([]byte, size)
 
