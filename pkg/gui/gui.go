@@ -14,6 +14,7 @@ type Text struct {
 	Font     rl.Font
 	FontSize int
 	Color    rl.Color
+	Hidden   bool
 }
 
 func (list Fonts) AddFont(name string, alias string, defRes int32) {

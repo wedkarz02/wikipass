@@ -9,14 +9,15 @@ import (
 )
 
 type Login struct {
-	Fonts       Fonts
-	Logo        rl.Texture2D
-	WelcomeText *Text
-	InputText   *Text
-	TextBox     rl.Rectangle
-	UnlockBtn   rl.Rectangle
-	ResetText   *Text
-	ResetBtn    rl.Rectangle
+	Fonts         Fonts
+	Logo          rl.Texture2D
+	WelcomeText   *Text
+	IncorrectPass *Text
+	InputText     *Text
+	TextBox       rl.Rectangle
+	UnlockBtn     rl.Rectangle
+	ResetText     *Text
+	ResetBtn      rl.Rectangle
 }
 
 func InitLogin() *Login {
@@ -30,6 +31,15 @@ func InitLogin() *Login {
 		Font:     li.Fonts["arialb"],
 		FontSize: 32,
 		Color:    WhiteColor,
+		Hidden:   false,
+	}
+
+	li.IncorrectPass = &Text{
+		Content:  "Incorrect Master Password",
+		Font:     li.Fonts["jbmb"],
+		FontSize: 20,
+		Color:    RedColor,
+		Hidden:   true,
 	}
 
 	li.InputText = &Text{
@@ -37,6 +47,7 @@ func InitLogin() *Login {
 		Font:     li.Fonts["jbmb"],
 		FontSize: 20,
 		Color:    WhiteColor,
+		Hidden:   false,
 	}
 
 	li.TextBox = rl.Rectangle{
@@ -58,6 +69,7 @@ func InitLogin() *Login {
 		Font:     li.Fonts["arialb"],
 		FontSize: 18,
 		Color:    TintColor,
+		Hidden:   false,
 	}
 
 	li.ResetBtn = rl.Rectangle{
@@ -71,6 +83,12 @@ func InitLogin() *Login {
 }
 
 func (li Login) UpdateLogin() {
+	if !aeswrapper.CheckDirExists(c.SecretDir) {
+		li.WelcomeText.Content = "Set Master Password"
+	} else {
+		li.WelcomeText.Content = "Enter Master Password"
+	}
+
 	CursorType(li.TextBox, rl.MouseCursorIBeam)
 	li.InputText.UpdateContent()
 
@@ -79,21 +97,26 @@ func (li Login) UpdateLogin() {
 			key := aeswrapper.GenKey(li.InputText.Content)
 
 			if aeswrapper.TestAuth(c.AuthFile, key) {
+				li.IncorrectPass.Hidden = true
 				fmt.Println("logged in correctly")
 			} else {
+				li.IncorrectPass.Hidden = false
 				fmt.Println("key incorrect")
 			}
-		}
-	})
-
-	ButtonAction(li.ResetBtn, false, func() {
-		if aeswrapper.CheckDirExists(c.SecretDir) {
-			aeswrapper.RmDir(c.SecretDir)
 		} else {
-			// TODO: Remove this later, it's just to make testing easier
 			aeswrapper.InitSecretDir(c.SecretDir, c.IVFile, 32)
 			key := aeswrapper.GenKey(li.InputText.Content)
 			aeswrapper.InitAuth(c.AuthFile, key, 64)
+		}
+
+		li.InputText.Content = ""
+	})
+
+	ButtonAction(li.ResetBtn, false, func() {
+		li.IncorrectPass.Hidden = true
+
+		if aeswrapper.CheckDirExists(c.SecretDir) {
+			aeswrapper.RmDir(c.SecretDir)
 		}
 	})
 }
@@ -109,6 +132,16 @@ func (li Login) DrawLogin() {
 			Y: c.LogWindowHeight/2 - 65},
 		float32(li.WelcomeText.FontSize), 0,
 		li.WelcomeText.Color)
+
+	if !li.IncorrectPass.Hidden {
+		rl.DrawTextEx(li.IncorrectPass.Font,
+			li.IncorrectPass.Content,
+			rl.Vector2{
+				X: li.TextBox.X,
+				Y: li.TextBox.Y - 24},
+			float32(li.IncorrectPass.FontSize), 0,
+			li.IncorrectPass.Color)
+	}
 
 	DrawTextBox(li.TextBox, li.InputText, BlackColor, true)
 
