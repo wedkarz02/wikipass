@@ -9,6 +9,7 @@ import (
 )
 
 type Login struct {
+	Active        bool
 	Fonts         Fonts
 	Logo          rl.Texture2D
 	WelcomeText   *Text
@@ -23,6 +24,7 @@ type Login struct {
 func InitLogin() *Login {
 	li := new(Login) // li for LogIn
 
+	li.Active = true
 	li.Logo = InitLogo()
 	li.Fonts = InitFonts()
 
@@ -82,7 +84,7 @@ func InitLogin() *Login {
 	return li
 }
 
-func (li Login) UpdateLogin() {
+func (li Login) UpdateLogin(app *App) {
 	if !aeswrapper.CheckDirExists(c.SecretDir) {
 		li.WelcomeText.Content = "Set Master Password"
 	} else {
@@ -98,6 +100,8 @@ func (li Login) UpdateLogin() {
 
 			if aeswrapper.TestAuth(c.AuthFile, key) {
 				li.IncorrectPass.Hidden = true
+				li.Active = false
+				app.Active = true
 				fmt.Println("logged in correctly")
 			} else {
 				li.IncorrectPass.Hidden = false

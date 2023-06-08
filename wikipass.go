@@ -13,14 +13,27 @@ func main() {
 	rl.SetTargetFPS(60)
 
 	login := gui.InitLogin()
+	app := gui.InitApp()
 
 	for !rl.WindowShouldClose() {
-		// UPDATE
-		login.UpdateLogin()
-
-		// DRAW
 		rl.BeginDrawing()
-		login.DrawLogin()
+
+		if login.Active {
+			// UPDATE
+			login.UpdateLogin(app)
+
+			// DRAW
+			login.DrawLogin()
+		}
+
+		if app.Active {
+			// UPDATE
+			app.UpdateApp(login)
+
+			// DRAW
+			app.DrawApp()
+		}
+
 		rl.EndDrawing()
 	}
 }

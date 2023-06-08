@@ -11,6 +11,9 @@ const (
 	LogWindowWidth  = 400
 	LogWindowHeight = 500
 
+	AppWindowWidth  = 800
+	AppWindowHeight = 600
+
 	LogoWidth  = 90
 	LogoHeight = 90
 )
