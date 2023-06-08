@@ -75,7 +75,15 @@ func (li Login) UpdateLogin() {
 	li.InputText.UpdateContent()
 
 	ButtonAction(li.UnlockBtn, true, func() {
-		fmt.Println(li.InputText.Content)
+		if aeswrapper.CheckDirExists(c.SecretDir) {
+			key := aeswrapper.GenKey(li.InputText.Content)
+
+			if aeswrapper.TestAuth(c.AuthFile, key) {
+				fmt.Println("logged in correctly")
+			} else {
+				fmt.Println("key incorrect")
+			}
+		}
 	})
 
 	ButtonAction(li.ResetBtn, false, func() {
@@ -84,6 +92,8 @@ func (li Login) UpdateLogin() {
 		} else {
 			// TODO: Remove this later, it's just to make testing easier
 			aeswrapper.InitSecretDir(c.SecretDir, c.IVFile, 32)
+			key := aeswrapper.GenKey(li.InputText.Content)
+			aeswrapper.InitAuth(c.AuthFile, key, 64)
 		}
 	})
 }

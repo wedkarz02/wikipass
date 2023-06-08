@@ -53,6 +53,22 @@ func InitSecretDir(dirPath string, ivPath string, ivSize uint8) {
 	}
 }
 
+func InitAuth(fileName string, key []byte, size int) {
+	randBytes := make([]byte, size)
+
+	if _, err := io.ReadFull(rand.Reader, randBytes); err != nil {
+		log.Fatalln("[ERROR]: Generation of the Auth file failed: ", err)
+	}
+
+	strRandBytes := []string{string(randBytes)}
+	EncryptAES(fileName, strRandBytes, key)
+}
+
+func TestAuth(fileName string, key []byte) bool {
+	_, err := DecryptAES(fileName, key)
+	return err == nil
+}
+
 func StringsToByte(str []string) []byte {
 	result := []byte{}
 
@@ -126,8 +142,7 @@ func DecryptAES(fileName string, key []byte) ([]string, error) {
 
 	if err != nil {
 		// The tested key is incorrect -> return an empty slice and an error
-		log.Fatalln("[ERROR]: The key is incorrect: ", err)
-		// return []byte{}, err
+		return []string{}, err
 	}
 
 	return ByteToStrings(plainText), nil
