@@ -7,15 +7,17 @@ import (
 )
 
 type App struct {
-	Active  bool
-	Fonts   Fonts
-	TmpText *Text
+	Active    bool
+	AuthError error
+	Fonts     Fonts
+	TmpText   *Text
 }
 
 func InitApp() *App {
 	app := new(App)
 
 	app.Active = false
+	app.AuthError = nil
 	app.Fonts = InitFonts()
 
 	app.TmpText = &Text{
@@ -33,15 +35,28 @@ func (app App) Resize() {
 	rl.SetWindowSize(c.AppWindowWidth, c.AppWindowHeight)
 }
 
-func (app App) UpdateApp(li *Login) {
+func (app *App) UpdateApp(li *Login) {
 	if li.Active {
 		li.Active = false
 		app.Resize()
 	}
+
+	// TODO: Handle this when decrypting the file
+	// app.AuthError = errors.New("dziaba dziaba dziaba")
 }
 
-func (app App) DrawApp() {
+func (app *App) DrawApp() {
 	rl.ClearBackground(DarkGreyColor)
+
+	if app.AuthError != nil {
+		rl.DrawTextEx(app.Fonts["jbmb"],
+			"Authentication Error...",
+			rl.Vector2{X: 100, Y: 100},
+			float32(60), 0,
+			RedColor)
+
+		return
+	}
 
 	rl.DrawTextEx(app.TmpText.Font,
 		app.TmpText.Content,

@@ -1,7 +1,6 @@
 package gui
 
 import (
-	"fmt"
 	"wikipass/pkg/aeswrapper"
 	c "wikipass/pkg/consts"
 
@@ -102,10 +101,8 @@ func (li Login) UpdateLogin(app *App) {
 				li.IncorrectPass.Hidden = true
 				li.Active = false
 				app.Active = true
-				fmt.Println("logged in correctly")
 			} else {
 				li.IncorrectPass.Hidden = false
-				fmt.Println("key incorrect")
 			}
 		} else {
 			aeswrapper.InitSecretDir(c.SecretDir, c.IVFile, 32)
