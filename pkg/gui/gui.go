@@ -37,7 +37,9 @@ func InitFonts() Fonts {
 	fonts := make(Fonts)
 
 	fonts.AddFont("arialbd", "arialb", 88)
-	fonts.AddFont("JetBrainsMono-Bold", "jbmb", 80)
+	fonts.AddFont("JetBrainsMono-Bold", "jbmb", 72)
+	fonts.AddFont("JetBrainsMono-Light", "jbml", 18)
+	fonts.AddFont("JetBrainsMono-Regular", "jbmr", 24)
 
 	return fonts
 }

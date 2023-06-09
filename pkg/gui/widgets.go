@@ -2,7 +2,6 @@ package gui
 
 import (
 	"strings"
-	c "wikipass/pkg/consts"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
@@ -16,7 +15,7 @@ func DrawTextBox(cfg Config, tb rl.Rectangle, text *Text, inputPos rl.Vector2, t
 
 	size := text.Size()
 	charSize := rl.MeasureTextEx(text.Font, " ", float32(text.FontSize), 0)
-	maxLen := int(tb.Width/charSize.X) - 2
+	maxLen := int(tb.Width/charSize.X) - 1
 
 	time := rl.GetTime()
 	fracTime := time - float64(int(time))
@@ -35,7 +34,6 @@ func DrawTextBox(cfg Config, tb rl.Rectangle, text *Text, inputPos rl.Vector2, t
 	if len(msg) < maxLen {
 		rl.DrawTextEx(text.Font,
 			msg,
-			// rl.Vector2{X: tb.X + 10, Y: tb.Y + 24},
 			inputPos,
 			float32(text.FontSize), 0,
 			text.Color)
@@ -56,13 +54,7 @@ func DrawTextBox(cfg Config, tb rl.Rectangle, text *Text, inputPos rl.Vector2, t
 	}
 }
 
-func DrawButton(btn rl.Rectangle, text *Text, btnColor rl.Color, hoverColor rl.Color) {
-	size := text.Size()
-	textPos := rl.Vector2{
-		X: c.LogWindowWidth/2 - size.X/2,
-		Y: btn.Y + btn.Height/2 - size.Y/2,
-	}
-
+func DrawButton(btn rl.Rectangle, text *Text, textPos rl.Vector2, btnColor rl.Color, hoverColor rl.Color) {
 	if RectMouseCollision(btn) {
 		rl.DrawRectangleRec(btn, hoverColor)
 	} else {

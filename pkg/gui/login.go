@@ -16,6 +16,7 @@ type Login struct {
 	InputText     *Text
 	TextBox       rl.Rectangle
 	UnlockBtn     rl.Rectangle
+	UnlockText    *Text
 	ResetText     *Text
 	ResetBtn      rl.Rectangle
 }
@@ -63,6 +64,14 @@ func InitLogin() *Login {
 		Y:      li.TextBox.Y + 80,
 		Width:  li.TextBox.Width,
 		Height: li.TextBox.Height,
+	}
+
+	li.UnlockText = &Text{
+		Content:  "Unlock Wikipass",
+		Font:     li.Fonts["arialb"],
+		FontSize: 24,
+		Color:    WhiteColor,
+		Hidden:   false,
 	}
 
 	li.ResetText = &Text{
@@ -157,11 +166,10 @@ func (li Login) DrawLogin() {
 		BlackColor, true)
 
 	DrawButton(li.UnlockBtn,
-		&Text{
-			Content:  "Unlock Wikipass",
-			Font:     li.Fonts["arialb"],
-			FontSize: 24,
-			Color:    WhiteColor},
+		li.UnlockText,
+		rl.Vector2{
+			X: c.LogWindowWidth/2 - li.UnlockText.Size().X/2,
+			Y: li.UnlockBtn.Y + li.UnlockBtn.Height/2 - li.UnlockText.Size().Y/2},
 		TintColor,
 		DarkTintColor)
 

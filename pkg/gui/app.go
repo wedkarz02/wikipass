@@ -12,6 +12,8 @@ type App struct {
 	Fonts       Fonts
 	MenuSect    rl.Rectangle
 	MenuGenText *Text
+	GenText     *Text
+	GenBounds   *Text
 	TextBox     rl.Rectangle
 	InputNum    *Text
 	Passwords   []*Text
@@ -39,17 +41,33 @@ func InitApp() *App {
 		Hidden:   false,
 	}
 
+	app.GenText = &Text{
+		Content:  "Number of Passwords",
+		Font:     app.Fonts["jbml"],
+		FontSize: 18,
+		Color:    LightGrey,
+		Hidden:   false,
+	}
+
+	app.GenBounds = &Text{
+		Content:  "0 < n < 25",
+		Font:     app.Fonts["jbml"],
+		FontSize: 18,
+		Color:    LightGrey,
+		Hidden:   false,
+	}
+
 	app.TextBox = rl.Rectangle{
 		X:      20,
-		Y:      app.MenuGenText.Size().Y + 60,
+		Y:      app.MenuGenText.Size().Y + 120,
 		Width:  app.MenuSect.Width - 2*20,
 		Height: 40,
 	}
 
 	app.InputNum = &Text{
 		Content:  "",
-		Font:     app.Fonts["jbmb"],
-		FontSize: 28,
+		Font:     app.Fonts["jbmr"],
+		FontSize: 24,
 		Color:    WhiteColor,
 		Hidden:   false,
 	}
@@ -71,6 +89,9 @@ func (app *App) UpdateApp(li *Login) {
 		li.Active = false
 		app.Resize()
 	}
+
+	CursorType(app.TextBox, rl.MouseCursorIBeam)
+	app.InputNum.UpdateContent()
 
 	// TODO: Handle this when decrypting the file
 	// app.AuthError = errors.New("dziaba dziaba dziaba")
@@ -111,11 +132,27 @@ func (app *App) DrawApp() {
 		float32(app.MenuGenText.FontSize), 0,
 		app.MenuGenText.Color)
 
+	rl.DrawTextEx(app.GenText.Font,
+		app.GenText.Content,
+		rl.Vector2{
+			X: app.TextBox.X,
+			Y: app.TextBox.Y - app.GenText.Size().Y*2 - 4},
+		float32(app.GenText.FontSize), 0,
+		app.GenText.Color)
+
+	rl.DrawTextEx(app.GenBounds.Font,
+		app.GenBounds.Content,
+		rl.Vector2{
+			X: app.TextBox.X,
+			Y: app.TextBox.Y - app.GenBounds.Size().Y - 4},
+		float32(app.GenBounds.FontSize), 0,
+		app.GenBounds.Color)
+
 	DrawTextBox(app,
 		app.TextBox,
 		app.InputNum,
 		rl.Vector2{
-			X: app.TextBox.X + 5,
+			X: app.TextBox.X + 10,
 			Y: app.TextBox.Y + app.TextBox.Height/2 - app.InputNum.Size().Y/2},
 		BlackColor, false)
 }
