@@ -32,7 +32,7 @@ func (text *Text) Size() rl.Vector2 {
 func InitFonts() Fonts {
 	fonts := make(Fonts)
 
-	fonts.AddFont("arialbd", "arialb", 80)
+	fonts.AddFont("arialbd", "arialb", 88)
 	fonts.AddFont("JetBrainsMono-Bold", "jbmb", 80)
 
 	return fonts

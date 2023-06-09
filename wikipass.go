@@ -12,6 +12,8 @@ func main() {
 	defer rl.CloseWindow()
 	rl.SetTargetFPS(60)
 
+	rl.SetWindowPosition(c.LogWindowPosX, c.LogWindowPosY)
+
 	login := gui.InitLogin()
 	app := gui.InitApp()
 

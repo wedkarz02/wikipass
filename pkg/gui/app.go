@@ -7,10 +7,11 @@ import (
 )
 
 type App struct {
-	Active    bool
-	AuthError error
-	Fonts     Fonts
-	TmpText   *Text
+	Active      bool
+	AuthError   error
+	Fonts       Fonts
+	MenuSect    rl.Rectangle
+	MenuGenText *Text
 }
 
 func InitApp() *App {
@@ -20,10 +21,17 @@ func InitApp() *App {
 	app.AuthError = nil
 	app.Fonts = InitFonts()
 
-	app.TmpText = &Text{
-		Content:  "hello",
+	app.MenuSect = rl.Rectangle{
+		X:      0,
+		Y:      0,
+		Width:  c.AppWindowWidth / 3,
+		Height: c.AppWindowHeight,
+	}
+
+	app.MenuGenText = &Text{
+		Content:  "Generate\nNew\nPasswords",
 		Font:     app.Fonts["arialb"],
-		FontSize: 80,
+		FontSize: 44,
 		Color:    WhiteColor,
 		Hidden:   false,
 	}
@@ -33,6 +41,7 @@ func InitApp() *App {
 
 func (app App) Resize() {
 	rl.SetWindowSize(c.AppWindowWidth, c.AppWindowHeight)
+	rl.SetWindowPosition(c.AppWindowPosX, c.AppWindowPosY)
 }
 
 func (app *App) UpdateApp(li *Login) {
@@ -45,22 +54,28 @@ func (app *App) UpdateApp(li *Login) {
 	// app.AuthError = errors.New("dziaba dziaba dziaba")
 }
 
+func (app *App) DrawAuthErr() {
+	rl.DrawTextEx(app.Fonts["jbmb"],
+		"Authentication Error...",
+		rl.Vector2{X: 100, Y: 100},
+		float32(60), 0,
+		RedColor)
+}
+
 func (app *App) DrawApp() {
-	rl.ClearBackground(DarkGreyColor)
+	rl.ClearBackground(WhiteColor)
 
 	if app.AuthError != nil {
-		rl.DrawTextEx(app.Fonts["jbmb"],
-			"Authentication Error...",
-			rl.Vector2{X: 100, Y: 100},
-			float32(60), 0,
-			RedColor)
-
+		app.DrawAuthErr()
 		return
 	}
 
-	rl.DrawTextEx(app.TmpText.Font,
-		app.TmpText.Content,
-		rl.Vector2{X: 350, Y: 250},
-		float32(app.TmpText.FontSize), 0,
-		app.TmpText.Color)
+	rl.DrawRectangleRec(app.MenuSect, DarkGreyColor)
+
+	rl.DrawTextEx(app.MenuGenText.Font,
+		app.MenuGenText.Content,
+		rl.Vector2{
+			X: 30, Y: 20},
+		float32(app.MenuGenText.FontSize), 0,
+		app.MenuGenText.Color)
 }
