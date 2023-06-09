@@ -1,6 +1,8 @@
 package gui
 
 import (
+	"fmt"
+	"strconv"
 	c "wikipass/pkg/consts"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
@@ -16,6 +18,8 @@ type App struct {
 	GenBounds   *Text
 	TextBox     rl.Rectangle
 	InputNum    *Text
+	GenBtn      rl.Rectangle
+	BtnText     *Text
 	Passwords   []*Text
 }
 
@@ -72,6 +76,21 @@ func InitApp() *App {
 		Hidden:   false,
 	}
 
+	app.GenBtn = rl.Rectangle{
+		X:      20,
+		Y:      app.TextBox.Y + 60,
+		Width:  app.TextBox.Width,
+		Height: app.TextBox.Height,
+	}
+
+	app.BtnText = &Text{
+		Content:  "Generate",
+		Font:     app.Fonts["arialb"],
+		FontSize: 24,
+		Color:    WhiteColor,
+		Hidden:   false,
+	}
+
 	return app
 }
 
@@ -84,6 +103,20 @@ func (app App) Resize() {
 	rl.SetWindowPosition(c.AppWindowPosX, c.AppWindowPosY)
 }
 
+func (app App) CheckBoundInput() bool {
+	testNum, err := strconv.Atoi(app.InputNum.Content)
+
+	if err != nil {
+		return false
+	}
+
+	if testNum > 0 && testNum < 25 {
+		return true
+	}
+
+	return false
+}
+
 func (app *App) UpdateApp(li *Login) {
 	if li.Active {
 		li.Active = false
@@ -92,6 +125,14 @@ func (app *App) UpdateApp(li *Login) {
 
 	CursorType(app.TextBox, rl.MouseCursorIBeam)
 	app.InputNum.UpdateContent()
+
+	ButtonAction(app.GenBtn, true, func() {
+		if len(app.InputNum.Content) > 0 {
+			fmt.Println(app.CheckBoundInput())
+		}
+
+		app.InputNum.Content = ""
+	})
 
 	// TODO: Handle this when decrypting the file
 	// app.AuthError = errors.New("dziaba dziaba dziaba")
@@ -155,4 +196,12 @@ func (app *App) DrawApp() {
 			X: app.TextBox.X + 10,
 			Y: app.TextBox.Y + app.TextBox.Height/2 - app.InputNum.Size().Y/2},
 		BlackColor, false)
+
+	DrawButton(app.GenBtn,
+		app.BtnText,
+		rl.Vector2{
+			X: app.GenBtn.X + app.GenBtn.Width/2 - app.BtnText.Size().X/2,
+			Y: app.GenBtn.Y + app.GenBtn.Height/2 - app.BtnText.Size().Y/2},
+		TintColor,
+		DarkTintColor)
 }
