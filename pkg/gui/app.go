@@ -1,7 +1,6 @@
 package gui
 
 import (
-	"fmt"
 	"strconv"
 	c "wikipass/pkg/consts"
 
@@ -9,18 +8,19 @@ import (
 )
 
 type App struct {
-	Active      bool
-	AuthError   error
-	Fonts       Fonts
-	MenuSect    rl.Rectangle
-	MenuGenText *Text
-	GenText     *Text
-	GenBounds   *Text
-	TextBox     rl.Rectangle
-	InputNum    *Text
-	GenBtn      rl.Rectangle
-	BtnText     *Text
-	Passwords   []*Text
+	Active       bool
+	AuthError    error
+	Fonts        Fonts
+	MenuSect     rl.Rectangle
+	MenuGenText  *Text
+	GenText      *Text
+	GenBounds    *Text
+	TextBox      rl.Rectangle
+	InputNum     *Text
+	GenBtn       rl.Rectangle
+	BtnText      *Text
+	InvalidInput *Text
+	Passwords    []*Text
 }
 
 func InitApp() *App {
@@ -91,6 +91,14 @@ func InitApp() *App {
 		Hidden:   false,
 	}
 
+	app.InvalidInput = &Text{
+		Content:  "Invalid Input.",
+		Font:     app.Fonts["jbmb"],
+		FontSize: 22,
+		Color:    RedColor,
+		Hidden:   true,
+	}
+
 	return app
 }
 
@@ -128,7 +136,12 @@ func (app *App) UpdateApp(li *Login) {
 
 	ButtonAction(app.GenBtn, true, func() {
 		if len(app.InputNum.Content) > 0 {
-			fmt.Println(app.CheckBoundInput())
+			if app.CheckBoundInput() {
+				// TODO: Generate passwords here
+				app.InvalidInput.Hidden = true
+			} else {
+				app.InvalidInput.Hidden = false
+			}
 		}
 
 		app.InputNum.Content = ""
@@ -204,4 +217,14 @@ func (app *App) DrawApp() {
 			Y: app.GenBtn.Y + app.GenBtn.Height/2 - app.BtnText.Size().Y/2},
 		TintColor,
 		DarkTintColor)
+
+	if !app.InvalidInput.Hidden {
+		rl.DrawTextEx(app.InvalidInput.Font,
+			app.InvalidInput.Content,
+			rl.Vector2{
+				X: app.MenuSect.Width/2 - app.InvalidInput.Size().X/2,
+				Y: app.GenBtn.Y + 60},
+			float32(app.InvalidInput.FontSize), 0,
+			app.InvalidInput.Color)
+	}
 }
