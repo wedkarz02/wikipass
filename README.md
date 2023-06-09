@@ -22,7 +22,7 @@ or use the "Download ZIP" option from the [Github](https://github.com/wedkarz02/
 # Requirements
  * [Go v1.20+](https://go.dev/dl/)
  * [raylib-go](https://github.com/gen2brain/raylib-go)
- * [Linux OS (preferably)](https://ubuntu.com/download)
+ * [Linux OS](https://ubuntu.com/download)
 
 To download [raylib-go](https://github.com/gen2brain/raylib-go) run the *getrl.sh* script **with sudo privileges** from the terminal:
 ```bash
