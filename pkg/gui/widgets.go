@@ -7,7 +7,7 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-func DrawTextBox(tb rl.Rectangle, text *Text, tbColor rl.Color, hidden bool) {
+func DrawTextBox(cfg Config, tb rl.Rectangle, text *Text, inputPos rl.Vector2, tbColor rl.Color, hidden bool) {
 	msg := text.Content
 
 	if hidden {
@@ -24,30 +24,33 @@ func DrawTextBox(tb rl.Rectangle, text *Text, tbColor rl.Color, hidden bool) {
 	rl.DrawRectangleRec(tb, tbColor)
 	rl.DrawRectangleLinesEx(tb, 2.0, rl.Gray)
 
-	rl.DrawTextEx(text.Font,
-		"Master Password",
-		rl.Vector2{X: tb.X + 10, Y: tb.Y + 6},
-		20, 0,
-		Grey)
+	if cfg.IsLogin() {
+		rl.DrawTextEx(text.Font,
+			"Master Password",
+			rl.Vector2{X: tb.X + 10, Y: tb.Y + 6},
+			20, 0,
+			Grey)
+	}
 
 	if len(msg) < maxLen {
 		rl.DrawTextEx(text.Font,
 			msg,
-			rl.Vector2{X: tb.X + 10, Y: tb.Y + 24},
+			// rl.Vector2{X: tb.X + 10, Y: tb.Y + 24},
+			inputPos,
 			float32(text.FontSize), 0,
 			text.Color)
 
 		if fracTime > 0.5 {
 			rl.DrawTextEx(text.Font,
 				"|",
-				rl.Vector2{X: tb.X + 10 + size.X, Y: tb.Y + 24},
+				rl.Vector2{X: inputPos.X + size.X, Y: inputPos.Y},
 				float32(text.FontSize), 0,
 				text.Color)
 		}
 	} else {
 		rl.DrawTextEx(text.Font,
 			msg[:maxLen],
-			rl.Vector2{X: tb.X + 10, Y: tb.Y + 24},
+			inputPos,
 			float32(text.FontSize), 0,
 			text.Color)
 	}

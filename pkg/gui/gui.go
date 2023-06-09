@@ -17,6 +17,10 @@ type Text struct {
 	Hidden   bool
 }
 
+type Config interface {
+	IsLogin() bool
+}
+
 func (list Fonts) AddFont(name string, alias string, defRes int32) {
 	if _, inFonts := list[alias]; inFonts {
 		log.Fatalln("[ERROR]: Font already loaded!")

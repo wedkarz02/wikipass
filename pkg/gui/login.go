@@ -83,8 +83,12 @@ func InitLogin() *Login {
 	return li
 }
 
+func (li Login) IsLogin() bool {
+	return true
+}
+
 func (li Login) UpdateLogin(app *App) {
-	if !aeswrapper.CheckDirExists(c.SecretDir) {
+	if !aeswrapper.CheckIfExists(c.SecretDir) {
 		li.WelcomeText.Content = "Set Master Password"
 	} else {
 		li.WelcomeText.Content = "Enter Master Password"
@@ -94,7 +98,7 @@ func (li Login) UpdateLogin(app *App) {
 	li.InputText.UpdateContent()
 
 	ButtonAction(li.UnlockBtn, true, func() {
-		if aeswrapper.CheckDirExists(c.SecretDir) {
+		if aeswrapper.CheckIfExists(c.SecretDir) {
 			key := aeswrapper.GenKey(li.InputText.Content)
 
 			if aeswrapper.TestAuth(c.AuthFile, key) {
@@ -116,7 +120,7 @@ func (li Login) UpdateLogin(app *App) {
 	ButtonAction(li.ResetBtn, false, func() {
 		li.IncorrectPass.Hidden = true
 
-		if aeswrapper.CheckDirExists(c.SecretDir) {
+		if aeswrapper.CheckIfExists(c.SecretDir) {
 			aeswrapper.RmDir(c.SecretDir)
 		}
 	})
@@ -144,7 +148,13 @@ func (li Login) DrawLogin() {
 			li.IncorrectPass.Color)
 	}
 
-	DrawTextBox(li.TextBox, li.InputText, BlackColor, true)
+	DrawTextBox(li,
+		li.TextBox,
+		li.InputText,
+		rl.Vector2{
+			X: li.TextBox.X + 10,
+			Y: li.TextBox.Y + 24},
+		BlackColor, true)
 
 	DrawButton(li.UnlockBtn,
 		&Text{

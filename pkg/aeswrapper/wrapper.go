@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func CheckDirExists(path string) bool {
+func CheckIfExists(path string) bool {
 	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
 		return false
 	}
