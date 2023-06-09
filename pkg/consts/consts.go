@@ -21,5 +21,5 @@ const (
 	LogoWidth  = 90
 	LogoHeight = 90
 
-	MaxWordLen = 64
+	MaxPasswordsLen = 27
 )

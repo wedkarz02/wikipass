@@ -3,6 +3,7 @@ package gui
 import (
 	"strconv"
 	c "wikipass/pkg/consts"
+	"wikipass/pkg/pwder"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
@@ -33,7 +34,7 @@ func InitApp() *App {
 	app.MenuSect = rl.Rectangle{
 		X:      0,
 		Y:      0,
-		Width:  c.AppWindowWidth / 3.5,
+		Width:  c.AppWindowWidth / 3,
 		Height: c.AppWindowHeight,
 	}
 
@@ -54,7 +55,7 @@ func InitApp() *App {
 	}
 
 	app.GenBounds = &Text{
-		Content:  "0 < n < 25",
+		Content:  "0 < n < 28",
 		Font:     app.Fonts["jbml"],
 		FontSize: 18,
 		Color:    LightGrey,
@@ -71,7 +72,7 @@ func InitApp() *App {
 	app.InputNum = &Text{
 		Content:  "",
 		Font:     app.Fonts["jbmr"],
-		FontSize: 24,
+		FontSize: 22,
 		Color:    WhiteColor,
 		Hidden:   false,
 	}
@@ -118,11 +119,16 @@ func (app App) CheckBoundInput() bool {
 		return false
 	}
 
-	if testNum > 0 && testNum < 25 {
+	if testNum > 0 && testNum <= c.MaxPasswordsLen {
 		return true
 	}
 
 	return false
+}
+
+func (app *App) WrapPasswords(newEl *Text) {
+	app.Passwords = app.Passwords[1:]
+	app.Passwords = append(app.Passwords, newEl)
 }
 
 func (app *App) UpdateApp(li *Login) {
@@ -137,8 +143,28 @@ func (app *App) UpdateApp(li *Login) {
 	ButtonAction(app.GenBtn, true, func() {
 		if len(app.InputNum.Content) > 0 {
 			if app.CheckBoundInput() {
-				// TODO: Generate passwords here
+				// TODO: Decrypt saved passwords and append them here
+
 				app.InvalidInput.Hidden = true
+
+				n, _ := strconv.Atoi(app.InputNum.Content)
+				passwords := pwder.GetPasswords(n)
+
+				for _, word := range passwords {
+					password := &Text{
+						Content:  word,
+						Font:     app.Fonts["jbmr"],
+						FontSize: 22,
+						Color:    DarkGreyColor,
+						Hidden:   false,
+					}
+
+					if len(app.Passwords) >= c.MaxPasswordsLen {
+						app.WrapPasswords(password)
+					} else {
+						app.Passwords = append(app.Passwords, password)
+					}
+				}
 			} else {
 				app.InvalidInput.Hidden = false
 			}
@@ -177,6 +203,16 @@ func (app *App) DrawApp() {
 				Y: 30},
 			float32(22), 0,
 			DarkGreyColor)
+	} else {
+		for i, passwd := range app.Passwords {
+			rl.DrawTextEx(passwd.Font,
+				passwd.Content,
+				rl.Vector2{
+					X: app.MenuSect.Width + 10,
+					Y: float32(i*int(passwd.Size().Y) + int(passwd.Size().Y/2) - 5)},
+				float32(passwd.FontSize), 0,
+				passwd.Color)
+		}
 	}
 
 	rl.DrawTextEx(app.MenuGenText.Font,

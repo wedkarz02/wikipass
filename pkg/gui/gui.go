@@ -39,7 +39,7 @@ func InitFonts() Fonts {
 	fonts.AddFont("arialbd", "arialb", 88)
 	fonts.AddFont("JetBrainsMono-Bold", "jbmb", 72)
 	fonts.AddFont("JetBrainsMono-Light", "jbml", 18)
-	fonts.AddFont("JetBrainsMono-Regular", "jbmr", 24)
+	fonts.AddFont("JetBrainsMono-Regular", "jbmr", 22)
 
 	return fonts
 }

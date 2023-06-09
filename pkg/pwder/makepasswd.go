@@ -17,7 +17,7 @@ func InitWordList() []string {
 
 func SliceContains(list []string, el string) bool {
 	for _, str := range list {
-		if el == str {
+		if strings.EqualFold(str, el) {
 			return true
 		}
 	}
@@ -43,4 +43,23 @@ func GenPassword(ch chan<- string, wg *sync.WaitGroup) {
 	}
 
 	ch <- strings.Join(words, "-")
+}
+
+func GetPasswords(n int) []string {
+	var wg sync.WaitGroup
+	var passwords []string
+
+	ch := make(chan string)
+
+	for i := 0; i < n; i++ {
+		wg.Add(1)
+		go GenPassword(ch, &wg)
+	}
+
+	for i := 0; i < n; i++ {
+		passwords = append(passwords, <-ch)
+	}
+
+	wg.Wait()
+	return passwords
 }

@@ -162,7 +162,7 @@ func ExtractWords(content string) []string {
 			continue
 		}
 
-		if len(str) > 4 && len(str) < 15 {
+		if len(str) > 4 && len(str) < 13 {
 			wordList = append(wordList, str)
 		}
 	}
