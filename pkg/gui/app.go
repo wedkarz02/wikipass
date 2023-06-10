@@ -22,6 +22,9 @@ type App struct {
 	BtnText      *Text
 	InvalidInput *Text
 	Passwords    []*Text
+	LogoutText   *Text
+	LogoutBtn    rl.Rectangle
+	Close        bool
 }
 
 func InitApp() *App {
@@ -29,6 +32,7 @@ func InitApp() *App {
 
 	app.Active = false
 	app.AuthError = nil
+	app.Close = false
 	app.Fonts = InitFonts()
 
 	app.MenuSect = rl.Rectangle{
@@ -98,6 +102,21 @@ func InitApp() *App {
 		FontSize: 22,
 		Color:    RedColor,
 		Hidden:   true,
+	}
+
+	app.LogoutText = &Text{
+		Content:  "Logout",
+		Font:     app.Fonts["arialb"],
+		FontSize: 24,
+		Color:    TintColor,
+		Hidden:   false,
+	}
+
+	app.LogoutBtn = rl.Rectangle{
+		X:      app.MenuSect.Width/2 - app.LogoutText.Size().X/2,
+		Y:      c.AppWindowHeight - 80,
+		Width:  app.LogoutText.Size().X,
+		Height: app.LogoutText.Size().Y,
 	}
 
 	return app
@@ -173,6 +192,10 @@ func (app *App) UpdateApp(li *Login) {
 		app.InputNum.Content = ""
 	})
 
+	ButtonAction(app.LogoutBtn, false, func() {
+		app.Close = true
+	})
+
 	// TODO: Handle this when decrypting the file
 	// app.AuthError = errors.New("dziaba dziaba dziaba")
 }
@@ -205,13 +228,30 @@ func (app *App) DrawApp() {
 			DarkGreyColor)
 	} else {
 		for i, passwd := range app.Passwords {
-			rl.DrawTextEx(passwd.Font,
-				passwd.Content,
-				rl.Vector2{
-					X: app.MenuSect.Width + 10,
-					Y: float32(i*int(passwd.Size().Y) + int(passwd.Size().Y/2) - 5)},
-				float32(passwd.FontSize), 0,
-				passwd.Color)
+			currentField := rl.Rectangle{
+				X:      app.MenuSect.Width,
+				Y:      float32(i*int(passwd.Size().Y) + 3),
+				Width:  passwd.Size().X,
+				Height: passwd.Size().Y,
+			}
+
+			if RectMouseCollision(currentField) {
+				rl.DrawTextEx(passwd.Font,
+					passwd.Content,
+					rl.Vector2{
+						X: app.MenuSect.Width + 10,
+						Y: float32(i*int(passwd.Size().Y) + 3)},
+					float32(passwd.FontSize), 0,
+					DarkTintColor)
+			} else {
+				rl.DrawTextEx(passwd.Font,
+					passwd.Content,
+					rl.Vector2{
+						X: app.MenuSect.Width + 10,
+						Y: float32(i*int(passwd.Size().Y) + 3)},
+					float32(passwd.FontSize), 0,
+					passwd.Color)
+			}
 		}
 	}
 
@@ -262,5 +302,23 @@ func (app *App) DrawApp() {
 				Y: app.GenBtn.Y + 60},
 			float32(app.InvalidInput.FontSize), 0,
 			app.InvalidInput.Color)
+	}
+
+	if RectMouseCollision(app.LogoutBtn) {
+		rl.DrawTextEx(app.LogoutText.Font,
+			app.LogoutText.Content,
+			rl.Vector2{
+				X: app.LogoutBtn.X,
+				Y: app.LogoutBtn.Y},
+			float32(app.LogoutText.FontSize), 0,
+			DarkTintColor)
+	} else {
+		rl.DrawTextEx(app.LogoutText.Font,
+			app.LogoutText.Content,
+			rl.Vector2{
+				X: app.LogoutBtn.X,
+				Y: app.LogoutBtn.Y},
+			float32(app.LogoutText.FontSize), 0,
+			app.LogoutText.Color)
 	}
 }

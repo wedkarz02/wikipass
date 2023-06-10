@@ -31,6 +31,9 @@ func main() {
 		if app.Active {
 			// UPDATE
 			app.UpdateApp(login)
+			if app.Close {
+				break
+			}
 
 			// DRAW
 			app.DrawApp()
