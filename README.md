@@ -33,7 +33,7 @@ Build the project by 'cd-ing' into the *wikipass/* directory and using the *go b
 $ cd wikipass/
 $ go build
 ```
-Please keep in mind that the first use of [raylib-go](https://github.com/gen2brain/raylib-go) might take a while to compile.\
+Please keep in mind that the first use of [raylib-go](https://github.com/gen2brain/raylib-go) might take a while to compile. Wikipass requires internet connection while generating new passwords.\
 Open the app by running the compiled executable file:
 ```bash
 $ ./wikipass
