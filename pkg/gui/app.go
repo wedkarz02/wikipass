@@ -126,6 +126,10 @@ func (app App) IsLogin() bool {
 	return false
 }
 
+func (app App) CopyPassword(password *Text) {
+	rl.SetClipboardText(password.Content)
+}
+
 func (app App) Resize() {
 	rl.SetWindowSize(c.AppWindowWidth, c.AppWindowHeight)
 	rl.SetWindowPosition(c.AppWindowPosX, c.AppWindowPosY)
@@ -243,6 +247,10 @@ func (app *App) DrawApp() {
 						Y: float32(i*int(passwd.Size().Y) + 3)},
 					float32(passwd.FontSize), 0,
 					DarkTintColor)
+
+				if rl.IsMouseButtonPressed(rl.MouseLeftButton) {
+					app.CopyPassword(passwd)
+				}
 			} else {
 				rl.DrawTextEx(passwd.Font,
 					passwd.Content,
