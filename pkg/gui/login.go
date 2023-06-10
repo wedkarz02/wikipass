@@ -96,12 +96,14 @@ func (li Login) IsLogin() bool {
 	return true
 }
 
-func (li Login) UpdateLogin(app *App) {
+func (li Login) UpdateLogin(app *App) string {
 	if !aeswrapper.CheckIfExists(c.SecretDir) {
 		li.WelcomeText.Content = "Set Master Password"
 	} else {
 		li.WelcomeText.Content = "Enter Master Password"
 	}
+
+	retKey := ""
 
 	CursorType(li.TextBox, rl.MouseCursorIBeam)
 	li.InputText.UpdateContent()
@@ -114,6 +116,8 @@ func (li Login) UpdateLogin(app *App) {
 				li.IncorrectPass.Hidden = true
 				li.Active = false
 				app.Active = true
+
+				retKey = li.InputText.Content
 			} else {
 				li.IncorrectPass.Hidden = false
 			}
@@ -133,6 +137,8 @@ func (li Login) UpdateLogin(app *App) {
 			aeswrapper.RmDir(c.SecretDir)
 		}
 	})
+
+	return retKey
 }
 
 func (li Login) DrawLogin() {

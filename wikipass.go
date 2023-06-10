@@ -16,13 +16,17 @@ func main() {
 
 	login := gui.InitLogin()
 	app := gui.InitApp()
+	var passKey string
 
 	for !rl.WindowShouldClose() {
 		rl.BeginDrawing()
 
 		if login.Active {
 			// UPDATE
-			login.UpdateLogin(app)
+			tmpKey := login.UpdateLogin(app)
+			if tmpKey != "" {
+				passKey = tmpKey
+			}
 
 			// DRAW
 			login.DrawLogin()
@@ -30,7 +34,7 @@ func main() {
 
 		if app.Active {
 			// UPDATE
-			app.UpdateApp(login)
+			app.UpdateApp(login, passKey)
 			if app.Close {
 				break
 			}

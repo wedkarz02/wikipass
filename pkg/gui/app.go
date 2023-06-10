@@ -156,13 +156,13 @@ func (app *App) WrapPasswords(newEl *Text) {
 	app.Passwords = append(app.Passwords, newEl)
 }
 
-func (app *App) UpdateApp(li *Login) {
+func (app *App) UpdateApp(li *Login, passKey string) {
 	if li.Active {
 		li.Active = false
 		app.Resize()
 
 		if aeswrapper.CheckIfExists(c.EncryptionFile) {
-			key := aeswrapper.GenKey(li.InputText.Content)
+			key := aeswrapper.GenKey(passKey)
 			decryptedData, err := aeswrapper.DecryptAES(c.EncryptionFile, key)
 
 			if err != nil {
@@ -221,7 +221,7 @@ func (app *App) UpdateApp(li *Login) {
 					dataForEncr = append(dataForEncr, passwd.Content)
 				}
 
-				key := aeswrapper.GenKey(li.InputText.Content)
+				key := aeswrapper.GenKey(passKey)
 				aeswrapper.EncryptAES(c.EncryptionFile, dataForEncr, key)
 			} else {
 				app.InvalidInput.Hidden = false
