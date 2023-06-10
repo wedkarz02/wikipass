@@ -1,8 +1,6 @@
 # Wikipass
 
-**Please keep in mind that this project is still a work in progress, therefore it may contain bugs, missing features and security flaws.**
-
-Wikipass is a tool created for generating very secure and basically uncrackable passwords. \
+Wikipass is a tool created for generating very secure and uncrackable passwords. \
 It uses MediaWiki (which is a Wikipedia API) to recieve contents of a randomly selected Wikipedia article and convert it into a large set of random words manipulated by some rules later. A password is created by linking a few of those words with a hyphen into one long string of characters that should be resistant to brute-force and dictionary attacks. It cannot be social engineered either since the words are chosen randomly. I highly recommend watching [this video](https://www.youtube.com/watch?v=3NjQ9b3pgIg) by Computerphile if you haven't already. \
 With that being said, I cannot guarantee complete security during the generation itself due to reasons listed below:
  * Article contents are sent from MediaWiki (which I know very little about how it's implemented) over HTTP. That might be a vulnerability in public networks.
