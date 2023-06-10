@@ -69,16 +69,9 @@ func TestAuth(fileName string, key []byte) bool {
 	return err == nil
 }
 
-func StringsToByte(str []string) []byte {
-	result := []byte{}
-
-	for _, word := range str {
-		row := []byte(word)
-		row = append(row, byte('\n'))
-		result = append(result, row...)
-	}
-
-	return result
+func StringsToByte(data []string) []byte {
+	result := strings.Join(data, "\n")
+	return []byte(result)
 }
 
 func ByteToStrings(data []byte) []string {

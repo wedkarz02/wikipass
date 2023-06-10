@@ -1,7 +1,9 @@
 package gui
 
 import (
+	"errors"
 	"strconv"
+	"wikipass/pkg/aeswrapper"
 	c "wikipass/pkg/consts"
 	"wikipass/pkg/pwder"
 
@@ -158,6 +160,32 @@ func (app *App) UpdateApp(li *Login) {
 	if li.Active {
 		li.Active = false
 		app.Resize()
+
+		if aeswrapper.CheckIfExists(c.EncryptionFile) {
+			key := aeswrapper.GenKey(li.InputText.Content)
+			decryptedData, err := aeswrapper.DecryptAES(c.EncryptionFile, key)
+
+			if err != nil {
+				app.AuthError = errors.New("authentication failed")
+				return
+			}
+
+			for _, word := range decryptedData {
+				newPassword := &Text{
+					Content:  word,
+					Font:     app.Fonts["jbmr"],
+					FontSize: 22,
+					Color:    DarkGreyColor,
+					Hidden:   false,
+				}
+
+				if len(app.Passwords) >= c.MaxPasswordsLen {
+					app.WrapPasswords(newPassword)
+				} else {
+					app.Passwords = append(app.Passwords, newPassword)
+				}
+			}
+		}
 	}
 
 	CursorType(app.TextBox, rl.MouseCursorIBeam)
@@ -166,12 +194,12 @@ func (app *App) UpdateApp(li *Login) {
 	ButtonAction(app.GenBtn, true, func() {
 		if len(app.InputNum.Content) > 0 {
 			if app.CheckBoundInput() {
-				// TODO: Decrypt saved passwords and append them here
-
 				app.InvalidInput.Hidden = true
 
 				n, _ := strconv.Atoi(app.InputNum.Content)
 				passwords := pwder.GetPasswords(n)
+
+				var dataForEncr []string
 
 				for _, word := range passwords {
 					password := &Text{
@@ -188,6 +216,13 @@ func (app *App) UpdateApp(li *Login) {
 						app.Passwords = append(app.Passwords, password)
 					}
 				}
+
+				for _, passwd := range app.Passwords {
+					dataForEncr = append(dataForEncr, passwd.Content)
+				}
+
+				key := aeswrapper.GenKey(li.InputText.Content)
+				aeswrapper.EncryptAES(c.EncryptionFile, dataForEncr, key)
 			} else {
 				app.InvalidInput.Hidden = false
 			}
@@ -199,9 +234,6 @@ func (app *App) UpdateApp(li *Login) {
 	ButtonAction(app.LogoutBtn, false, func() {
 		app.Close = true
 	})
-
-	// TODO: Handle this when decrypting the file
-	// app.AuthError = errors.New("dziaba dziaba dziaba")
 }
 
 func (app *App) DrawAuthErr() {
