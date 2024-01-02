@@ -38,3 +38,7 @@ Open the app by running the compiled executable file:
 ```bash
 $ ./wikipass
 ```
+
+# License
+Wikipass is available under the MIT license. See the [LICENSE](https://github.com/wedkarz02/wikipass/blob/main/LICENSE) file for more info.
+
